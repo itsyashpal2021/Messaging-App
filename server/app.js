@@ -10,7 +10,14 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-app.post("/post", (req, res) => {
+// handle new user registeration
+app.post("/register", (req, res) => {
+  console.log(req.body);
+  res.status(200).send();
+});
+
+// handle login
+app.post("/login", (req, res) => {
   console.log(req.body);
   res.status(200).send();
 });

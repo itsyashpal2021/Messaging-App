@@ -25,12 +25,12 @@ export function RegisterForm(props) {
 
     //posting to express server
     //to do so we also need to add proxy in react-app node module
-    fetch("../../post", {
+    fetch("../../register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formValues),
     }).then((response) => {
-      //FIXME: logic for user already present in db
+      //TODO: logic for user already present in db
       navigate("/user");
     });
   };
