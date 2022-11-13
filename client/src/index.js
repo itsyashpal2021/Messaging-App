@@ -12,6 +12,10 @@ const router = createBrowserRouter([
     path: "/register",
     element: <RegisterForm />,
   },
+  {
+    path: "/user",
+    element: <h1>user page not created yet</h1>,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
