@@ -1,27 +1,30 @@
 import React from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getFormValues, postToNodeServer, Routes } from "../utils.js";
 
 export function LoginForm(props) {
   let navigate = useNavigate();
+  const [labelVisible, setLabelVisible] = useState(false);
 
   const onSubmit = (event) => {
     //prevent refresh
     event.preventDefault();
+    const formValues = getFormValues(event);
 
-    //extracting values of inputs from form
-    let form = event.target;
-    let formData = new FormData(form);
-    let formValues = Object.fromEntries(formData);
-
-    //posting to express server
-    //to do so we also need to add proxy in react-app node module
-    fetch("../../login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formValues),
-    }).then((response) => {
-      //TODO: email not found and incorrect password case.
-      navigate("/user");
+    postToNodeServer(Routes.LOGIN_ROUTE, formValues).then((response) => {
+      switch (response.status) {
+        case 401:
+          setLabelVisible(true);
+          break;
+        case 200:
+          setLabelVisible(false);
+          navigate(Routes.USER_ROUTE);
+          break;
+        default:
+          console.log("Recieved Response:", response);
+          break;
+      }
     });
   };
 
@@ -61,6 +64,15 @@ export function LoginForm(props) {
             </div>
             <div className="row justify-content-center mt-2">
               <div className="col-md-5 col-10 px-1">
+                <label
+                  className="col-10 fs-6"
+                  style={{
+                    display: labelVisible === false ? "none" : "block",
+                    color: "red",
+                  }}
+                >
+                  Invalid Login
+                </label>
                 <button
                   type="submit"
                   className="btn btn-primary d-block w-100 fs-5 my-2"

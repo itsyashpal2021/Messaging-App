@@ -3,23 +3,25 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RegisterForm } from "./components/Register";
 import { LoginForm } from "./components/Login";
+import { Routes } from "./utils";
+import { UserDashboard } from "./user/UserDashboard";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <UserDashboard />,
+  },
+  {
+    path: Routes.LOGIN_ROUTE,
     element: <LoginForm />,
   },
   {
-    path: "/login",
-    element: <LoginForm />,
-  },
-  {
-    path: "/register",
+    path: Routes.REGISTER_ROUTE,
     element: <RegisterForm />,
   },
   {
-    path: "/user",
-    element: <h1>user page not created yet</h1>,
+    path: Routes.USER_ROUTE,
+    element: <UserDashboard />,
   },
 ]);
 

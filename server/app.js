@@ -57,7 +57,6 @@ app.post("/login", (req, res) => {
   const user = new User(req.body);
   req.logIn(user, function (err) {
     if (err) {
-      console.log(err);
       res.json(err);
     } else {
       passport.authenticate("local")(req, res, function () {
@@ -65,6 +64,14 @@ app.post("/login", (req, res) => {
       });
     }
   });
+});
+
+app.post("/user", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.status(200).send();
+  } else {
+    res.status(401).send();
+  }
 });
 
 app.listen(port, () => {

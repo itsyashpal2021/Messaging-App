@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getFormValues, postToNodeServer, Routes } from "../utils";
 
 export function RegisterForm(props) {
   let navigate = useNavigate();
@@ -10,12 +11,7 @@ export function RegisterForm(props) {
   const onSubmit = (event) => {
     //prevent refresh
     event.preventDefault();
-    setLabelVisible(false);
-
-    //extracting values of inputs from form
-    let form = event.target;
-    let formData = new FormData(form);
-    let formValues = Object.fromEntries(formData);
+    const formValues = getFormValues(event);
 
     //if passwords do not match
     if (formValues.password !== formValues.confirmPassword) {
@@ -23,20 +19,14 @@ export function RegisterForm(props) {
       setLabelText("Passwords do not match.");
       return;
     }
-
     delete formValues.confirmPassword;
 
-    //posting to express server
-    //to do so we also need to add proxy in react-app package.json
-    fetch("../../register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formValues),
-    })
+    postToNodeServer(Routes.REGISTER_ROUTE, formValues)
       .then((response) => response.json())
       .then((response) => {
         if (response.name === "SUCCESS") {
-          navigate("/user");
+          setLabelVisible(false);
+          navigate(Routes.USER_ROUTE);
         } else {
           setLabelVisible(true);
           setLabelText(response.message);
