@@ -1,25 +1,70 @@
-const express = require("express");
 const path = require("path");
-const app = express();
+const express = require("express");
+const db = require("./db/index.js");
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
+const { default: mongoose } = require("mongoose");
 
+const app = express();
 const port = 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello world!");
-});
+//initialize session
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+// initialize passport and set up session using it
+app.use(passport.initialize());
+app.use(passport.session());
+
+//passportLocalMongoose
+const userSchema = db.userSchema;
+userSchema.plugin(passportLocalMongoose, { usernameField: "email" });
+
+const User = new mongoose.model("User", userSchema);
+
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//mongo db connection
+db.connectToDb();
 
 // handle new user registeration
 app.post("/register", (req, res) => {
-  console.log(req.body);
-  res.status(200).send();
+  const password = req.body.password;
+  User.register(new User(req.body), password, function (err, user) {
+    if (err) {
+      res.json(err);
+    } else {
+      passport.authenticate("local")(req, res, function () {
+        res.json({ name: "SUCCESS" });
+      });
+    }
+  });
 });
 
 // handle login
 app.post("/login", (req, res) => {
-  console.log(req.body);
-  res.status(200).send();
+  const user = new User(req.body);
+  req.logIn(user, function (err) {
+    if (err) {
+      console.log(err);
+      res.json(err);
+    } else {
+      passport.authenticate("local")(req, res, function () {
+        res.json({ name: "SUCCESS" });
+      });
+    }
+  });
 });
 
 app.listen(port, () => {

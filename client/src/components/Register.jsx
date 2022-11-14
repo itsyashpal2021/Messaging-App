@@ -4,35 +4,44 @@ import { useNavigate } from "react-router-dom";
 
 export function RegisterForm(props) {
   let navigate = useNavigate();
-  const [passwordLabelVisible, setPasswordLabelVisible] = useState(false);
+  const [labelVisible, setLabelVisible] = useState(false);
+  const [labelText, setLabelText] = useState("");
 
   const onSubmit = (event) => {
     //prevent refresh
     event.preventDefault();
+    setLabelVisible(false);
 
     //extracting values of inputs from form
     let form = event.target;
     let formData = new FormData(form);
     let formValues = Object.fromEntries(formData);
 
-    //if passwords do not
+    //if passwords do not match
     if (formValues.password !== formValues.confirmPassword) {
-      setPasswordLabelVisible(true);
+      setLabelVisible(true);
+      setLabelText("Passwords do not match.");
       return;
     }
 
-    setPasswordLabelVisible(false);
+    delete formValues.confirmPassword;
 
     //posting to express server
-    //to do so we also need to add proxy in react-app node module
+    //to do so we also need to add proxy in react-app package.json
     fetch("../../register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formValues),
-    }).then((response) => {
-      //TODO: logic for user already present in db
-      navigate("/user");
-    });
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.name === "SUCCESS") {
+          navigate("/user");
+        } else {
+          setLabelVisible(true);
+          setLabelText(response.message);
+        }
+      });
   };
 
   return (
@@ -152,11 +161,11 @@ export function RegisterForm(props) {
             <label
               className="col-10 fs-6"
               style={{
-                display: passwordLabelVisible === false ? "none" : "block",
+                display: labelVisible === false ? "none" : "block",
                 color: "red",
               }}
             >
-              Passwords Do Not Match
+              {labelText}
             </label>
           </div>
           <div className="row justify-content-center mt-4">
