@@ -26,7 +26,7 @@ app.use(passport.session());
 
 //passportLocalMongoose
 const userSchema = db.userSchema;
-userSchema.plugin(passportLocalMongoose, { usernameField: "email" });
+userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model("User", userSchema);
 
@@ -43,10 +43,14 @@ app.post("/register", (req, res) => {
   const password = req.body.password;
   User.register(new User(req.body), password, function (err, user) {
     if (err) {
+      //if email id is duplicate
+      if (err.code === 11000) {
+        res.json({ message: "A user with this email id already exists." });
+      }
       res.json(err);
     } else {
       passport.authenticate("local")(req, res, function () {
-        res.json({ name: "SUCCESS" });
+        res.json({ message: "SUCCESS" });
       });
     }
   });
@@ -68,10 +72,19 @@ app.post("/login", (req, res) => {
 
 app.post("/user", (req, res) => {
   if (req.isAuthenticated()) {
-    res.status(200).send();
+    res.status(200).json(req.user);
   } else {
     res.status(401).send();
   }
+});
+
+app.post("/logout", (req, res) => {
+  req.logOut(function (err) {
+    if (err) {
+      res.status(400).send(err);
+    }
+    res.sendStatus(200);
+  });
 });
 
 app.listen(port, () => {

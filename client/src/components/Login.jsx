@@ -34,14 +34,17 @@ export function LoginForm(props) {
         <div className="container-fluid py-5">
           <div className="row justify-content-center">
             <div className="col-md-5 col-10 my-2">
-              <label htmlFor="emailInput" className="form-label fs-5 d-block">
-                Email Id
+              <label
+                htmlFor="userNameInput"
+                className="form-label fs-5 d-block"
+              >
+                Username
               </label>
               <input
-                type="email"
+                type="text"
                 className="form-control-lg w-100"
-                id="emailInput"
-                name="email"
+                id="userNameInput"
+                name="username"
                 required
               />
             </div>

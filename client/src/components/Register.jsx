@@ -24,7 +24,7 @@ export function RegisterForm(props) {
     postToNodeServer(Routes.REGISTER_ROUTE, formValues)
       .then((response) => response.json())
       .then((response) => {
-        if (response.name === "SUCCESS") {
+        if (response.message === "SUCCESS") {
           setLabelVisible(false);
           navigate(Routes.USER_ROUTE);
         } else {
@@ -38,6 +38,24 @@ export function RegisterForm(props) {
     <div className="container-xl">
       <form onSubmit={onSubmit}>
         <div className="container-fluid py-5">
+          <div className="row justify-content-center">
+            <div className="col-md-5 col-10 my-2">
+              <label
+                htmlFor="userNameInput"
+                className="form-label fs-5 d-block"
+              >
+                Username
+              </label>
+              <input
+                type="text"
+                className="form-control-lg w-100"
+                id="userNameInput"
+                name="username"
+                required
+              />
+            </div>
+            <div className="col-md-5"></div>
+          </div>
           <div className="row justify-content-center">
             <div className="col-md-5 col-10 my-2">
               <label
@@ -88,7 +106,7 @@ export function RegisterForm(props) {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="genderRadio"
+                  name="gender"
                   id="genderMaleInput"
                   value="Male"
                   required
@@ -104,7 +122,7 @@ export function RegisterForm(props) {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="genderRadio"
+                  name="gender"
                   id="genderFemaleInput"
                   value="Female"
                 />

@@ -1,5 +1,6 @@
 export const Routes = {
   LOGIN_ROUTE: "/login",
+  LOGOUT_ROUTE: "/logout",
   REGISTER_ROUTE: "/register",
   USER_ROUTE: "/user",
 };
