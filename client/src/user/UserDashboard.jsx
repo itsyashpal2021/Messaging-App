@@ -30,11 +30,11 @@ export function UserDashboard(props) {
     <div className="container-fluid row m-0 p-0" style={{ minHeight: "100vh" }}>
       <div className="col-12 col-md-4 col-lg-5 col-xxl-4 d-flex flex-column p-0">
         <UserProfile userData={userData} />
-        <FriendList />
+        <FriendList username={userData.username} />
       </div>
       <div
         className="col-12 col-md-8 col-lg-7 col-xxl-8 p-0"
-        style={{ backgroundColor: "#dbdbc0" }}
+        style={{ backgroundColor: "white" }}
       >
         <h1>Chat</h1>
       </div>

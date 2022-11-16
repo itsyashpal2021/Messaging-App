@@ -87,6 +87,23 @@ app.post("/logout", (req, res) => {
   });
 });
 
+app.post("/search-user", (req, res) => {
+  const username = req.body.username;
+  User.find({ username: { $regex: `${username}.*` } }, function (err, arr) {
+    if (err) {
+      res.status(500).json({ error: err });
+    }
+    const searchResults = arr.map((user) => {
+      return {
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      };
+    });
+    res.status(200).json({ users: searchResults });
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}.`);
 });

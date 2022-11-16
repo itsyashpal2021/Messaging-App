@@ -17,16 +17,14 @@ export function UserProfile(props) {
   return (
     <div
       className="container-fluid d-flex  flex-lg-row flex-column justify-content-between p-2"
-      style={{ backgroundColor: "rgb(236 218 218)" }}
+      style={{ backgroundColor: "#1B2430", color: "white" }}
     >
       <div className="d-flex flex-wrap justify-content-center align-items-center">
         <div className="profile-picture me-2">
           <i className="fa-solid fa-user" />
         </div>
         <div>
-          <p className="m-0 fs-1 text-center" style={{ color: "#3b0606" }}>
-            {props.userData.username}
-          </p>
+          <p className="m-0 fs-1 text-center">{props.userData.username}</p>
           <p className="m-0 h5 text-center">
             {props.userData.firstName} {props.userData.lastName}
           </p>

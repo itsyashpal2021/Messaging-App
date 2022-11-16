@@ -1,0 +1,16 @@
+.searchResult {
+  display: flex;
+  align-items: center;
+  user-select: none;
+  background-color: #999dc6;
+  border-radius: 10px;
+}
+
+.searchResult:hover {
+  background-color: #777cbb;
+}
+
+.addFriendButton {
+  margin-left: auto;
+  cursor: pointer;
+}

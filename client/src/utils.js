@@ -3,6 +3,7 @@ export const Routes = {
   LOGOUT_ROUTE: "/logout",
   REGISTER_ROUTE: "/register",
   USER_ROUTE: "/user",
+  SEARCH_USER_ROUTE: "/search-user",
 };
 
 export const getFormValues = (event) => {
