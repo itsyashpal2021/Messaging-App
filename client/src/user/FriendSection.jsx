@@ -7,8 +7,8 @@ export function FriendSection(props) {
       className="container-fluid h-100 p-0"
       style={{ backgroundColor: "#51557E" }}
     >
-      <FriendRequests requests={props.friendRequests} />
-      <SearchUser username={props.username} />
+      <FriendRequests />
+      <SearchUser />
     </div>
   );
 }

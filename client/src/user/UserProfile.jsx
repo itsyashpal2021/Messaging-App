@@ -1,14 +1,19 @@
 import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../Css/UserProfile.css";
+import { setUser } from "../state/userSlice";
 import { postToNodeServer, Routes } from "../utils";
 
 export function UserProfile(props) {
   let navigate = useNavigate();
+  const userData = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
-  const onLogout = (event) => {
+  const onLogout = () => {
     postToNodeServer(Routes.LOGOUT_ROUTE, {}).then((response) => {
       if (response.status === 200) {
+        dispatch(setUser({}));
         navigate(Routes.LOGIN_ROUTE);
       }
     });
@@ -24,11 +29,11 @@ export function UserProfile(props) {
           <i className="fa-solid fa-user" />
         </div>
         <div>
-          <p className="m-0 fs-1 text-center">{props.userData.username}</p>
+          <p className="m-0 fs-1 text-center">{userData.username}</p>
           <p className="m-0 h5 text-center">
-            {props.userData.firstName} {props.userData.lastName}
+            {userData.firstName} {userData.lastName}
           </p>
-          <p className="m-0 text-primary text-center">{props.userData.email}</p>
+          <p className="m-0 text-primary text-center">{userData.email}</p>
         </div>
       </div>
       <button

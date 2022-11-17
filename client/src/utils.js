@@ -1,3 +1,5 @@
+import { setUser } from "./state/userSlice";
+
 export const Routes = {
   LOGIN_ROUTE: "/login",
   LOGOUT_ROUTE: "/logout",
@@ -19,5 +21,19 @@ export const postToNodeServer = (route, bodyJson) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(bodyJson),
+  });
+};
+
+export const updateUserData = (dispatch, navigate) => {
+  postToNodeServer(Routes.USER_ROUTE, {}).then((response) => {
+    if (response.status === 401) {
+      dispatch(setUser({}));
+      navigate(Routes.LOGIN_ROUTE);
+    } else if (response.status === 200) {
+      response.json().then((response) => {
+        dispatch(setUser(response));
+        console.log("User Data Updated");
+      });
+    }
   });
 };

@@ -1,39 +1,32 @@
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { postToNodeServer, Routes } from "../utils";
+import { updateUserData } from "../utils";
 import { Loading } from "./Loading";
 import { UserProfile } from "./UserProfile";
 import { FriendSection } from "./FriendSection";
+import { useEffect } from "react";
 
 export function UserDashboard(props) {
+  const userData = useSelector((state) => state.user);
   let navigate = useNavigate();
-  const [loaded, setLoaded] = useState(false);
-  const [userData, setUserData] = useState({});
+  const dispatch = useDispatch();
 
+  //update user data every 10 seconds
   useEffect(() => {
-    if (loaded === true) return;
-    postToNodeServer(Routes.USER_ROUTE, {}).then((response) => {
-      if (response.status === 401) {
-        setLoaded(false);
-        navigate(Routes.LOGIN_ROUTE);
-      } else if (response.status === 200) {
-        response.json().then((response) => {
-          setUserData(response);
-          setLoaded(true);
-        });
-      }
-    });
-  });
-  return loaded === false ? (
+    updateUserData(dispatch, navigate);
+    const interval = setInterval(() => {
+      updateUserData(dispatch, navigate);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [dispatch, navigate]);
+
+  return userData.username === undefined ? (
     <Loading />
   ) : (
     <div className="container-fluid row m-0 p-0" style={{ minHeight: "100vh" }}>
       <div className="col-12 col-md-4 col-lg-5 col-xxl-4 d-flex flex-column p-0">
-        <UserProfile userData={userData} />
-        <FriendSection
-          username={userData.username}
-          friendRequests={userData.friendRequests}
-        />
+        <UserProfile />
+        <FriendSection />
       </div>
       <div
         className="col-12 col-md-8 col-lg-7 col-xxl-8 p-0"

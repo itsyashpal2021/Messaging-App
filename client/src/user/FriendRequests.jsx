@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export function FriendRequests(props) {
   const [showRequests, setShowRequets] = useState(false);
+  const friendRequests = useSelector((state) => state.user.friendRequests);
 
   const toggleShowRequests = (event) => {
     const target = event.target;
@@ -34,7 +36,7 @@ export function FriendRequests(props) {
           overflow: "hidden",
         }}
       >
-        {props.requests.map((username) => {
+        {friendRequests.map((username) => {
           return (
             <div
               className="d-flex align-items-center my-2 container-fluid"

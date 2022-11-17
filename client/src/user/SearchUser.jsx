@@ -1,10 +1,13 @@
 import "../Css/SearchUser.css";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { postToNodeServer, Routes } from "../utils";
 
 export function SearchUser(props) {
   const [searchResult, setSearchResult] = useState([]);
   const [checked, setChecked] = useState(false);
+
+  const username = useSelector((state) => state.user.username);
 
   const onSearch = (event) => {
     const searchedUser = event.target.value;
@@ -14,7 +17,7 @@ export function SearchUser(props) {
     }
     postToNodeServer(Routes.SEARCH_USER_ROUTE, {
       searchedUser: searchedUser,
-      currentUser: props.username,
+      currentUser: username,
     })
       .then((response) => response.json())
       .then((response) => {
@@ -24,7 +27,7 @@ export function SearchUser(props) {
 
   const addFriend = (event, username) => {
     postToNodeServer("../friendRequest", {
-      username: props.username,
+      username: username,
       friendRequestUsername: username,
     }).then((response) => {
       if (response.status === 200) {
