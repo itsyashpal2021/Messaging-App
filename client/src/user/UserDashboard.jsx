@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { postToNodeServer, Routes } from "../utils";
 import { Loading } from "./Loading";
 import { UserProfile } from "./UserProfile";
-import { FriendList } from "./FriendList";
+import { FriendSection } from "./FriendSection";
 
 export function UserDashboard(props) {
   let navigate = useNavigate();
@@ -17,9 +17,9 @@ export function UserDashboard(props) {
         setLoaded(false);
         navigate(Routes.LOGIN_ROUTE);
       } else if (response.status === 200) {
-        setLoaded(true);
         response.json().then((response) => {
           setUserData(response);
+          setLoaded(true);
         });
       }
     });
@@ -30,7 +30,10 @@ export function UserDashboard(props) {
     <div className="container-fluid row m-0 p-0" style={{ minHeight: "100vh" }}>
       <div className="col-12 col-md-4 col-lg-5 col-xxl-4 d-flex flex-column p-0">
         <UserProfile userData={userData} />
-        <FriendList username={userData.username} />
+        <FriendSection
+          username={userData.username}
+          friendRequests={userData.friendRequests}
+        />
       </div>
       <div
         className="col-12 col-md-8 col-lg-7 col-xxl-8 p-0"

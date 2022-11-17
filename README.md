@@ -10,3 +10,9 @@ use only class components?
 4. text chatting with friends.
 5. profile picture.
 6. emojis, images and videos in the chat.
+
+TODO:
+
+1. friend requests
+2. while searching users exclude users in friendlist
+3. search in friend list

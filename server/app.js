@@ -70,6 +70,7 @@ app.post("/login", (req, res) => {
   });
 });
 
+//handle user page
 app.post("/user", (req, res) => {
   if (req.isAuthenticated()) {
     res.status(200).json(req.user);
@@ -78,6 +79,7 @@ app.post("/user", (req, res) => {
   }
 });
 
+//log out
 app.post("/logout", (req, res) => {
   req.logOut(function (err) {
     if (err) {
@@ -87,21 +89,51 @@ app.post("/logout", (req, res) => {
   });
 });
 
+//searching a user
 app.post("/search-user", (req, res) => {
-  const username = req.body.username;
-  User.find({ username: { $regex: `${username}.*` } }, function (err, arr) {
-    if (err) {
-      res.status(500).json({ error: err });
+  const searchedUser = req.body.searchedUser;
+  const currentUser = req.body.currentUser;
+
+  //find the usernames starting with searched username other than the current user
+  User.find(
+    {
+      $and: [
+        { username: { $regex: `^${searchedUser}` } },
+        { username: { $not: { $regex: `^${currentUser}$` } } },
+      ],
+    },
+    function (err, arr) {
+      if (err) {
+        res.status(500).json({ error: err });
+      }
+      const searchResults = arr.map((user) => {
+        return {
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        };
+      });
+
+      res.status(200).json({ users: searchResults });
     }
-    const searchResults = arr.map((user) => {
-      return {
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      };
-    });
-    res.status(200).json({ users: searchResults });
-  });
+  );
+});
+
+//sending friendRequests
+app.post("/friendRequest", (req, res) => {
+  User.findOne(
+    { username: req.body.friendRequestUsername },
+    async function (err, user) {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500).send(err);
+      }
+      user.friendRequests.push(req.body.username);
+      console.log(user);
+      await user.save();
+      res.sendStatus(200);
+    }
+  );
 });
 
 app.listen(port, () => {

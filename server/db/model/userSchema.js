@@ -12,6 +12,16 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   gender: String,
+  friendList: [
+    {
+      type: String,
+    },
+  ],
+  friendRequests: [
+    {
+      type: String,
+    },
+  ],
 });
 
 module.exports = userSchema;
