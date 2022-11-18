@@ -1,11 +1,14 @@
 import { setUser } from "./state/userSlice";
 
 export const Routes = {
-  LOGIN_ROUTE: "/login",
-  LOGOUT_ROUTE: "/logout",
   REGISTER_ROUTE: "/register",
+  LOGIN_ROUTE: "/login",
   USER_ROUTE: "/user",
-  SEARCH_USER_ROUTE: "/search-user",
+  LOGOUT_ROUTE: "/logout",
+  SEARCH_USER_ROUTE: "/searchUser",
+  FRIEND_REQUEST_ROUTE: "/friendRequest",
+  ACCEPT_FRIEND_REQUEST_ROUTE: "/acceptFriendRequest",
+  REJECT_FRIEND_REQUEST_ROUTE: "/rejectFriendRequest",
 };
 
 export const getFormValues = (event) => {

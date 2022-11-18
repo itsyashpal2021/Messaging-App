@@ -1,0 +1,12 @@
+#friendListDiv {
+  overflow-y: scroll;
+  background-color: rgb(66 69 98);
+}
+
+.friendDiv {
+  display: flex;
+  user-select: none;
+}
+.friendDiv:hover {
+  background-color: rgb(47 50 75);
+}

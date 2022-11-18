@@ -1,9 +1,17 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { postToNodeServer, Routes, updateUserData } from "../utils";
 
 export function FriendRequests(props) {
   const [showRequests, setShowRequets] = useState(false);
-  const friendRequests = useSelector((state) => state.user.friendRequests);
+
+  const username = useSelector((state) => state.user.username);
+  const friendRequests = useSelector(
+    (state) => state.user.friendRequestsRecieved
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleShowRequests = (event) => {
     const target = event.target;
@@ -15,6 +23,32 @@ export function FriendRequests(props) {
       target.classList.add("fa-caret-down");
     }
     setShowRequets(!showRequests);
+  };
+
+  const acceptFriendRequest = (friendRequestUsername) => {
+    postToNodeServer(Routes.ACCEPT_FRIEND_REQUEST_ROUTE, {
+      username: username,
+      friendRequestUsername: friendRequestUsername,
+    }).then((response) => {
+      if (response.status === 200) {
+        updateUserData(dispatch, navigate);
+      } else {
+        console.log("Error accepting friend request", response);
+      }
+    });
+  };
+
+  const rejectFriendRequest = (friendRequestUsername) => {
+    postToNodeServer(Routes.REJECT_FRIEND_REQUEST_ROUTE, {
+      username: username,
+      friendRequestUsername: friendRequestUsername,
+    }).then((response) => {
+      if (response.status === 200) {
+        updateUserData(dispatch, navigate);
+      } else {
+        console.log("Error rejecting friend request", response);
+      }
+    });
   };
 
   return (
@@ -29,6 +63,16 @@ export function FriendRequests(props) {
           style={{ cursor: "pointer" }}
         />
         <span className="h6 ms-2 m-0">Friend Requests</span>
+        <div
+          className="align-self-start ms-1 mt-1"
+          style={{
+            width: "6px",
+            height: "6px",
+            borderRadius: "100%",
+            backgroundColor: "red",
+            display: friendRequests.length === 0 ? "none" : "inline",
+          }}
+        />
       </div>
       <div
         style={{
@@ -57,12 +101,14 @@ export function FriendRequests(props) {
               <button
                 className="btn btn-primary ms-auto me-2"
                 style={{ height: "fit-content" }}
+                onClick={() => acceptFriendRequest(username)}
               >
                 Accept
               </button>
               <button
                 className="btn btn-danger"
                 style={{ height: "fit-content" }}
+                onClick={() => rejectFriendRequest(username)}
               >
                 Reject
               </button>

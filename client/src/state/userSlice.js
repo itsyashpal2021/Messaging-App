@@ -11,7 +11,8 @@ export const userSlice = createSlice({
       state.lastName = user.lastName;
       state.email = user.email;
       state.friendList = user.friendList;
-      state.friendRequests = user.friendRequests;
+      state.friendRequestsRecieved = user.friendRequestsRecieved;
+      state.friendRequestsSent = user.friendRequestsSent;
     },
   },
 });

@@ -8,8 +8,9 @@ const userSchema = require("./model/userSchema.js");
 const dbURI = "mongodb://localhost:27017/messagingAppDb";
 
 module.exports = {
+  userSchema: userSchema,
+
   connectToDb: async function () {
-    mongoose.connect(dbURI);
     try {
       await mongoose.connect(dbURI);
     } catch (error) {
@@ -18,6 +19,4 @@ module.exports = {
       console.log("Connected to mongo Db.");
     }
   },
-
-  userSchema: userSchema,
 };

@@ -14,10 +14,17 @@ const userSchema = new mongoose.Schema({
   gender: String,
   friendList: [
     {
+      username: String,
+      firstName: String,
+      lastName: String,
+    },
+  ],
+  friendRequestsSent: [
+    {
       type: String,
     },
   ],
-  friendRequests: [
+  friendRequestsRecieved: [
     {
       type: String,
     },

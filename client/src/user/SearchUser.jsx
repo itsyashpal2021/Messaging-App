@@ -5,9 +5,16 @@ import { postToNodeServer, Routes } from "../utils";
 
 export function SearchUser(props) {
   const [searchResult, setSearchResult] = useState([]);
-  const [checked, setChecked] = useState(false);
 
   const username = useSelector((state) => state.user.username);
+  const friendUsernameList = new Set(
+    useSelector((state) => state.user.friendList).map((friend) => {
+      return friend.username;
+    })
+  );
+  const friendRequestSent = new Set(
+    useSelector((state) => state.user.friendRequestsSent)
+  );
 
   const onSearch = (event) => {
     const searchedUser = event.target.value;
@@ -25,10 +32,10 @@ export function SearchUser(props) {
       });
   };
 
-  const addFriend = (event, username) => {
-    postToNodeServer("../friendRequest", {
+  const addFriend = (event, friendRequestUsername) => {
+    postToNodeServer(Routes.FRIEND_REQUEST_ROUTE, {
       username: username,
-      friendRequestUsername: username,
+      friendRequestUsername: friendRequestUsername,
     }).then((response) => {
       if (response.status === 200) {
         const btn = event.target;
@@ -50,17 +57,6 @@ export function SearchUser(props) {
         placeholder="Search an user"
         onChange={onSearch}
       />
-      <input
-        type="checkbox"
-        id="searchInFriendListCheckbox"
-        onChange={() => setChecked(!checked)}
-      />
-      <label
-        htmlFor="searchInFriendListCheckbox"
-        className="h6 text-white ms-1"
-      >
-        Search In Friend List.
-      </label>
 
       <div>
         {searchResult.map((user) => {
@@ -82,10 +78,20 @@ export function SearchUser(props) {
                   {user.firstName} {user.lastName}
                 </p>
               </div>
-              <i
-                className="fa-solid fa-user-plus addFriendButton fs-5"
-                onClick={(event) => addFriend(event, user.username)}
-              />
+              {friendRequestSent.has(user.username) === true ? (
+                <i className="fa-solid fa-check text-success ms-auto fs-5" />
+              ) : friendUsernameList.has(user.username) === true ? (
+                <i
+                  class="fa-solid fa-user-check ms-auto fs-5"
+                  style={{ color: "#003080" }}
+                ></i>
+              ) : (
+                <i
+                  className="fa-solid fa-user-plus ms-auto fs-5"
+                  style={{ cursor: "pointer" }}
+                  onClick={(event) => addFriend(event, user.username)}
+                />
+              )}
             </div>
           );
         })}

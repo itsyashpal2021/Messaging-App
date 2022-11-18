@@ -90,50 +90,111 @@ app.post("/logout", (req, res) => {
 });
 
 //searching a user
-app.post("/search-user", (req, res) => {
+app.post("/searchUser", async (req, res) => {
   const searchedUser = req.body.searchedUser;
   const currentUser = req.body.currentUser;
 
   //find the usernames starting with searched username other than the current user
-  User.find(
-    {
-      $and: [
-        { username: { $regex: `^${searchedUser}` } },
-        { username: { $not: { $regex: `^${currentUser}$` } } },
-      ],
-    },
-    function (err, arr) {
-      if (err) {
-        res.status(500).json({ error: err });
-      }
-      const searchResults = arr.map((user) => {
-        return {
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-        };
-      });
+  let users = await User.find({
+    $and: [
+      { username: { $regex: `^${searchedUser}` } },
+      { username: { $not: { $regex: `^${currentUser}$` } } },
+    ],
+  }).limit(5);
 
-      res.status(200).json({ users: searchResults });
-    }
-  );
+  const searchResults = users.map((user) => {
+    return {
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+  });
+
+  res.status(200).json({ users: searchResults });
 });
 
-//sending friendRequests
-app.post("/friendRequest", (req, res) => {
-  User.findOne(
-    { username: req.body.friendRequestUsername },
-    async function (err, user) {
-      if (err) {
-        console.log(err);
-        res.sendStatus(500).send(err);
-      }
-      user.friendRequests.push(req.body.username);
-      console.log(user);
-      await user.save();
-      res.sendStatus(200);
-    }
+//send friendRequests
+app.post("/friendRequest", async (req, res) => {
+  const username = req.body.username;
+  const friendRequestUsername = req.body.friendRequestUsername;
+
+  const user = await User.findOne({ username: username });
+  const friendUser = await User.findOne({ username: friendRequestUsername });
+
+  //update user
+  user.friendRequestsSent.push(friendRequestUsername);
+  await user.save();
+
+  //update friendUser
+  friendUser.friendRequestsRecieved.push(username);
+  await friendUser.save();
+
+  res.sendStatus(200);
+});
+
+// accept friend request
+//add in friend list of both and remove from friendRequestUser's request list
+app.post("/acceptFriendRequest", async (req, res) => {
+  const username = req.body.username;
+  const friendRequestUsername = req.body.friendRequestUsername;
+
+  const user = await User.findOne({ username: username });
+  const friendUser = await User.findOne({ username: friendRequestUsername });
+
+  //user changes
+  user.friendList.push({
+    username: friendUser.username,
+    firstName: friendUser.firstName,
+    lastName: friendUser.lastName,
+  });
+  user.friendRequestsRecieved = user.friendRequestsRecieved.filter(
+    (item) => item !== friendRequestUsername
   );
+  // in case this user has also sent an request
+  user.friendRequestsSent = user.friendRequestsSent.filter(
+    (item) => item !== friendRequestUsername
+  );
+  await user.save();
+
+  // friendUser change
+  friendUser.friendList.push({
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  });
+  friendUser.friendRequestsSent = friendUser.friendRequestsSent.filter(
+    (item) => item !== username
+  );
+  // in case other user has also recieved an request
+  friendUser.friendRequestsRecieved = friendUser.friendRequestsRecieved.filter(
+    (item) => item !== username
+  );
+  await friendUser.save();
+
+  res.sendStatus(200);
+});
+
+//reject friend request
+app.post("/rejectFriendRequest", async (req, res) => {
+  const username = req.body.username;
+  const friendRequestUsername = req.body.friendRequestUsername;
+
+  const user = await User.findOne({ username: username });
+  const friendUser = await User.findOne({ username: friendRequestUsername });
+
+  //update user
+  user.friendRequestsRecieved = user.friendRequestsRecieved.filter(
+    (item) => item !== friendRequestUsername
+  );
+  await user.save();
+
+  //update friend user
+  friendUser.friendRequestsSent = user.friendRequestsSent.filter(
+    (item) => item !== username
+  );
+  await friendUser.save();
+
+  res.sendStatus(200);
 });
 
 app.listen(port, () => {

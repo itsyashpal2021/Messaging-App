@@ -9,8 +9,3 @@
 .searchResult:hover {
   background-color: #777cbb;
 }
-
-.addFriendButton {
-  margin-left: auto;
-  cursor: pointer;
-}

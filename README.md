@@ -13,6 +13,8 @@ use only class components?
 
 TODO:
 
-1. friend requests
-2. while searching users exclude users in friendlist
-3. search in friend list
+Usermodel from db folder
+chat with friend from search
+separate profile picture component
+friendlist scroll bar
+friendlist sorted by messagetime
