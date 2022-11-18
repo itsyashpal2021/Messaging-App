@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { postToNodeServer, Routes, updateUserData } from "../utils";
+import { postToNodeServer, Routes, updateUserData } from "../../../utils";
 
 export function FriendRequests(props) {
   const [showRequests, setShowRequets] = useState(false);

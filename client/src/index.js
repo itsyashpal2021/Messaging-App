@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RegisterForm } from "./components/Register";
 import { LoginForm } from "./components/Login";
 import { Routes } from "./utils";
-import { UserDashboard } from "./user/UserDashboard";
+import { UserDashboard } from "./components/Dashboard/UserDashboard";
 import store from "./state/store";
 import { Provider } from "react-redux";
 

@@ -1,4 +1,4 @@
-import { SearchUser } from "./SearchUser";
+import { SearchUser } from "../SearchUser";
 import { FriendRequests } from "./FriendRequests";
 import { FriendList } from "./FriendList";
 

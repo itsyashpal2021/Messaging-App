@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "../Css/UserProfile.css";
-import { setUser } from "../state/userSlice";
-import { postToNodeServer, Routes } from "../utils";
+import "../../Css/UserProfile.css";
+import { setUser } from "../../state/userSlice";
+import { postToNodeServer, Routes } from "../../utils";
 
 export function UserProfile(props) {
   let navigate = useNavigate();

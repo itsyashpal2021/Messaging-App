@@ -1,9 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { updateUserData } from "../utils";
-import { Loading } from "./Loading";
+import { updateUserData } from "../../utils";
+import { Loading } from "../Loading";
 import { UserProfile } from "./UserProfile";
-import { FriendSection } from "./FriendSection";
+import { FriendSection } from "./FriendSection/FriendSection";
 import { useEffect } from "react";
 
 export function UserDashboard(props) {

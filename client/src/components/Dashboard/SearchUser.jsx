@@ -1,7 +1,7 @@
-import "../Css/SearchUser.css";
+import "../../Css/SearchUser.css";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { postToNodeServer, Routes } from "../utils";
+import { postToNodeServer, Routes } from "../../utils";
 
 export function SearchUser(props) {
   const [searchResult, setSearchResult] = useState([]);

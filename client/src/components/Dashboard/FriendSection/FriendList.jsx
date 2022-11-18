@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import "../Css/FriendList.css";
+import "../../../Css/FriendList.css";
 
 export function FriendList(props) {
   const friendList = useSelector((state) => state.user.friendList);
