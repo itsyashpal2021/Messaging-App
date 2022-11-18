@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../../Css/UserProfile.css";
+import { setActiveChat } from "../../state/activeChatSlice";
 import { setUser } from "../../state/userSlice";
 import { postToNodeServer, Routes } from "../../utils";
 
@@ -14,6 +15,7 @@ export function UserProfile(props) {
     postToNodeServer(Routes.LOGOUT_ROUTE, {}).then((response) => {
       if (response.status === 200) {
         dispatch(setUser({}));
+        dispatch(setActiveChat({}));
         navigate(Routes.LOGIN_ROUTE);
       }
     });

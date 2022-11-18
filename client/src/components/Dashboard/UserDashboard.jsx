@@ -4,10 +4,13 @@ import { updateUserData } from "../../utils";
 import { Loading } from "../Loading";
 import { UserProfile } from "./UserProfile";
 import { FriendSection } from "./FriendSection/FriendSection";
+import { Chat } from "./ChatSection/Chat";
 import { useEffect } from "react";
 
 export function UserDashboard(props) {
   const userData = useSelector((state) => state.user);
+  const activeChat = useSelector((state) => state.activeChat.username);
+
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -23,16 +26,24 @@ export function UserDashboard(props) {
   return userData.username === undefined ? (
     <Loading />
   ) : (
-    <div className="container-fluid row m-0 p-0" style={{ minHeight: "100vh" }}>
-      <div className="col-12 col-md-4 col-lg-5 col-xxl-4 d-flex flex-column p-0">
+    <div className="container-fluid row m-0 p-0 h-100">
+      <div className="col-12 col-md-5 col-xxl-4 d-flex flex-column p-0">
         <UserProfile />
         <FriendSection />
       </div>
       <div
-        className="col-12 col-md-8 col-lg-7 col-xxl-8 p-0"
-        style={{ backgroundColor: "white" }}
+        className="col-12 col-md-7  col-xxl-8 p-0"
+        style={{
+          display:
+            window.innerWidth <= 767 && activeChat === undefined
+              ? "none"
+              : "block",
+          position: window.innerWidth <= 767 ? "fixed" : "static",
+          top: "0",
+          bottom: "0",
+        }}
       >
-        <h1>Chat</h1>
+        <Chat />
       </div>
     </div>
   );
