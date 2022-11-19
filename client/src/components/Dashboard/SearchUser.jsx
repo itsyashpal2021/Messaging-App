@@ -1,10 +1,12 @@
 import "../../Css/SearchUser.css";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postToNodeServer, Routes } from "../../utils";
+import { setActiveChat } from "../../state/activeChatSlice";
 
 export function SearchUser(props) {
   const [searchResult, setSearchResult] = useState([]);
+  const dispatch = useDispatch();
 
   const username = useSelector((state) => state.user.username);
   const friendUsernameList = new Set(
@@ -61,7 +63,15 @@ export function SearchUser(props) {
       <div>
         {searchResult.map((user) => {
           return (
-            <div key={user.username} className="searchResult my-1 p-2">
+            <div
+              key={user.username}
+              className="searchResult my-1 p-2"
+              onClick={() => {
+                if (friendUsernameList.has(user.username)) {
+                  dispatch(setActiveChat(user));
+                }
+              }}
+            >
               <div
                 className="profile-picture me-2 fs-3"
                 style={{
@@ -84,7 +94,7 @@ export function SearchUser(props) {
                 <i
                   className="fa-solid fa-user-check ms-auto fs-5"
                   style={{ color: "#003080" }}
-                ></i>
+                />
               ) : (
                 <i
                   className="fa-solid fa-user-plus ms-auto fs-5"

@@ -13,10 +13,9 @@ use only class components?
 
 TODO:
 
-friendlist hover select fix...
 server error returns
 Usermodel from db folder
-chat with friend from search
+when to update data
+scrollbar styling
 separate profile picture component
-friendlist scroll bar
 friendlist sorted by messagetime

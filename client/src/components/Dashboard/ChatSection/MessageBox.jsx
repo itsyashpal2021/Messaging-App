@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export function MessageBox(props) {
@@ -6,9 +7,16 @@ export function MessageBox(props) {
     (message) => message.to === friend || message.from === friend
   );
 
+  useEffect(() => {
+    //scroll to bottom
+    const messageBox = document.getElementById("messageBox");
+    messageBox.scrollTop = messageBox.scrollHeight;
+  });
+
   return (
     <div
       className="h-100 container-fluid px-2 d-flex flex-column"
+      id="messageBox"
       style={{ overflowY: "scroll", backgroundColor: "inherit" }}
     >
       {messages.map((message) => {
@@ -24,7 +32,7 @@ export function MessageBox(props) {
               alignSelf: isRecieved ? "flex-start" : "flex-end",
             }}
           >
-            <p className="m-0">{message.message}</p>
+            <p className="m-0 text-break">{message.message}</p>
           </div>
         );
       })}

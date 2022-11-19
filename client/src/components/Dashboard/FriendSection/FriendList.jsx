@@ -33,11 +33,11 @@ export function FriendList(props) {
                 event.target.style.backgroundColor = "rgb(57 60 85)";
             }}
             onMouseLeave={(event) => {
-              if (
-                activeChat.username === undefined ||
-                activeChat.username !== friend.username
-              )
-                event.target.style.backgroundColor = "inherit";
+              event.target.style.backgroundColor =
+                activeChat.username !== undefined &&
+                activeChat.username === friend.username
+                  ? "rgb(47 50 75)"
+                  : "inherit";
             }}
             onClick={() => {
               dispatch(setActiveChat(friend));
@@ -54,7 +54,7 @@ export function FriendList(props) {
             >
               <i className="fa-solid fa-user" />
             </div>
-            <span className="fs-3 text-white">
+            <span className="fs-3 text-white bg-transparent">
               {friend.firstName} {friend.lastName}
             </span>
           </div>
