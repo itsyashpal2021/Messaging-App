@@ -1,10 +1,11 @@
 const path = require("path");
 const express = require("express");
-const db = require("./db/index.js");
+const { userSchema, Message, connectToDb } = require("./db/index.js");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const { default: mongoose } = require("mongoose");
+const { response } = require("express");
 
 const app = express();
 const port = 8080;
@@ -25,7 +26,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //passportLocalMongoose
-const userSchema = db.userSchema;
 userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model("User", userSchema);
@@ -36,7 +36,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //mongo db connection
-db.connectToDb();
+connectToDb();
 
 // handle new user registeration
 app.post("/register", (req, res) => {
@@ -71,9 +71,17 @@ app.post("/login", (req, res) => {
 });
 
 //handle user page
-app.post("/user", (req, res) => {
+app.post("/user", async (req, res) => {
   if (req.isAuthenticated()) {
-    res.status(200).json(req.user);
+    const messages = await Message.find({
+      $or: [{ to: req.user.username }, { from: req.user.username }],
+    }).sort({
+      time: "asc",
+    });
+
+    const userData = { ...req.user._doc, messages: messages };
+
+    res.status(200).json(userData);
   } else {
     res.status(401).send();
   }
@@ -194,6 +202,13 @@ app.post("/rejectFriendRequest", async (req, res) => {
   );
   await friendUser.save();
 
+  res.sendStatus(200);
+});
+
+// send message
+app.post("/sendMessage", async (req, res) => {
+  const message = new Message(req.body);
+  await message.save();
   res.sendStatus(200);
 });
 

@@ -1,11 +1,15 @@
 import React from "react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { setActiveChat } from "../state/activeChatSlice.js";
 import { getFormValues, postToNodeServer, Routes } from "../utils.js";
 
 export function LoginForm(props) {
   let navigate = useNavigate();
   const [labelVisible, setLabelVisible] = useState(false);
+
+  const dispatch = useDispatch();
 
   const onSubmit = (event) => {
     //prevent refresh
@@ -19,6 +23,7 @@ export function LoginForm(props) {
           break;
         case 200:
           setLabelVisible(false);
+          dispatch(setActiveChat({}));
           navigate(Routes.USER_ROUTE);
           break;
         default:

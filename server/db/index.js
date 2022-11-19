@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const Message = require("./model/messageSchema.js");
 
 const userSchema = require("./model/userSchema.js");
 
@@ -9,6 +10,7 @@ const dbURI = "mongodb://localhost:27017/messagingAppDb";
 
 module.exports = {
   userSchema: userSchema,
+  Message: Message,
 
   connectToDb: async function () {
     try {

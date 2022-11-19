@@ -9,17 +9,16 @@ import { useEffect } from "react";
 
 export function UserDashboard(props) {
   const userData = useSelector((state) => state.user);
-  const activeChat = useSelector((state) => state.activeChat.username);
 
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  //update user data every 10 seconds
+  //update user data every 5 seconds
   useEffect(() => {
     updateUserData(dispatch, navigate);
     const interval = setInterval(() => {
       updateUserData(dispatch, navigate);
-    }, 10000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [dispatch, navigate]);
 
@@ -31,20 +30,7 @@ export function UserDashboard(props) {
         <UserProfile />
         <FriendSection />
       </div>
-      <div
-        className="col-12 col-md-7  col-xxl-8 p-0"
-        style={{
-          display:
-            window.innerWidth <= 767 && activeChat === undefined
-              ? "none"
-              : "block",
-          position: window.innerWidth <= 767 ? "fixed" : "static",
-          top: "0",
-          bottom: "0",
-        }}
-      >
-        <Chat />
-      </div>
+      <Chat />
     </div>
   );
 }

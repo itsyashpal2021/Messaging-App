@@ -9,6 +9,8 @@ export const Routes = {
   FRIEND_REQUEST_ROUTE: "/friendRequest",
   ACCEPT_FRIEND_REQUEST_ROUTE: "/acceptFriendRequest",
   REJECT_FRIEND_REQUEST_ROUTE: "/rejectFriendRequest",
+  GET_MESSAGES_ROUTE: "/getMessages",
+  SEND_MESSAGE_ROUTE: "/sendMessage",
 };
 
 export const getFormValues = (event) => {

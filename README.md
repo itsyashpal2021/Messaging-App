@@ -13,6 +13,8 @@ use only class components?
 
 TODO:
 
+friendlist hover select fix...
+server error returns
 Usermodel from db folder
 chat with friend from search
 separate profile picture component

@@ -82,7 +82,7 @@ export function SearchUser(props) {
                 <i className="fa-solid fa-check text-success ms-auto fs-5" />
               ) : friendUsernameList.has(user.username) === true ? (
                 <i
-                  class="fa-solid fa-user-check ms-auto fs-5"
+                  className="fa-solid fa-user-check ms-auto fs-5"
                   style={{ color: "#003080" }}
                 ></i>
               ) : (

@@ -13,6 +13,7 @@ export const userSlice = createSlice({
       state.friendList = user.friendList;
       state.friendRequestsRecieved = user.friendRequestsRecieved;
       state.friendRequestsSent = user.friendRequestsSent;
+      state.messages = user.messages;
     },
   },
 });
