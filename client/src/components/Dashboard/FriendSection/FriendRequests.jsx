@@ -25,30 +25,30 @@ export function FriendRequests(props) {
     setShowRequets(!showRequests);
   };
 
-  const acceptFriendRequest = (friendRequestUsername) => {
-    postToNodeServer(Routes.ACCEPT_FRIEND_REQUEST_ROUTE, {
-      username: username,
-      friendRequestUsername: friendRequestUsername,
-    }).then((response) => {
-      if (response.status === 200) {
-        updateUserData(dispatch, navigate);
-      } else {
-        console.log("Error accepting friend request", response);
+  const acceptFriendRequest = async (friendRequestUsername) => {
+    const response = await postToNodeServer(
+      Routes.ACCEPT_FRIEND_REQUEST_ROUTE,
+      {
+        username: username,
+        friendRequestUsername: friendRequestUsername,
       }
-    });
+    );
+    if (response.status === 200) {
+      updateUserData(dispatch, navigate);
+    }
   };
 
-  const rejectFriendRequest = (friendRequestUsername) => {
-    postToNodeServer(Routes.REJECT_FRIEND_REQUEST_ROUTE, {
-      username: username,
-      friendRequestUsername: friendRequestUsername,
-    }).then((response) => {
-      if (response.status === 200) {
-        updateUserData(dispatch, navigate);
-      } else {
-        console.log("Error rejecting friend request", response);
+  const rejectFriendRequest = async (friendRequestUsername) => {
+    const response = await postToNodeServer(
+      Routes.REJECT_FRIEND_REQUEST_ROUTE,
+      {
+        username: username,
+        friendRequestUsername: friendRequestUsername,
       }
-    });
+    );
+    if (response.status === 200) {
+      updateUserData(dispatch, navigate);
+    }
   };
 
   return (

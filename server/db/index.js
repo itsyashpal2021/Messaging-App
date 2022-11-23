@@ -1,15 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Message = require("./model/messageSchema.js");
-
-const userSchema = require("./model/userSchema.js");
+const Message = require("./model/message.js");
+const User = require("./model/user.js");
 
 //mongo setup
 //connect to db server
 const dbURI = "mongodb://localhost:27017/messagingAppDb";
 
 module.exports = {
-  userSchema: userSchema,
+  User: User,
   Message: Message,
 
   connectToDb: async function () {

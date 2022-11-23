@@ -8,29 +8,20 @@ import { getFormValues, postToNodeServer, Routes } from "../utils.js";
 export function LoginForm(props) {
   let navigate = useNavigate();
   const [labelVisible, setLabelVisible] = useState(false);
-
   const dispatch = useDispatch();
 
-  const onSubmit = (event) => {
-    //prevent refresh
+  const onSubmit = async (event) => {
     event.preventDefault();
     const formValues = getFormValues(event);
 
-    postToNodeServer(Routes.LOGIN_ROUTE, formValues).then((response) => {
-      switch (response.status) {
-        case 401:
-          setLabelVisible(true);
-          break;
-        case 200:
-          setLabelVisible(false);
-          dispatch(setActiveChat({}));
-          navigate(Routes.USER_ROUTE);
-          break;
-        default:
-          console.log("Recieved Response:", response);
-          break;
-      }
-    });
+    const response = await postToNodeServer(Routes.LOGIN_ROUTE, formValues);
+    if (response.status === 401) {
+      setLabelVisible(true);
+    } else if (response.status === 200) {
+      setLabelVisible(false);
+      dispatch(setActiveChat({}));
+      navigate(Routes.USER_ROUTE);
+    }
   };
 
   return (

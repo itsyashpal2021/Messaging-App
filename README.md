@@ -1,6 +1,5 @@
 Welcome to messaging app project.
-Tech stack : react (frontend) + django / nodeJs --- (TBD)
-use only class components?
+Tech stack : react (frontend) + nodeJs
 
 ----- Milestones ----
 
@@ -10,12 +9,12 @@ use only class components?
 4. text chatting with friends.
 5. profile picture.
 6. emojis, images and videos in the chat.
+7. unfriend, clear chat
 
 TODO:
 
-server error returns
-Usermodel from db folder
 when to update data
+emojis
 scrollbar styling
 separate profile picture component
 friendlist sorted by messagetime

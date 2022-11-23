@@ -31,7 +31,8 @@ export function MessageBox(props) {
           minute: "2-digit",
         });
 
-        let date = dateObject.toLocaleDateString();
+        //date in british year format
+        let date = dateObject.toLocaleDateString("en-GB");
         if (date === lastDate) {
           date = "";
         } else {

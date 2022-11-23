@@ -9,23 +9,21 @@ export function ChatBox(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     const chatbox = document.getElementById("chatbox");
     if (chatbox.value === "") return;
 
-    postToNodeServer(Routes.SEND_MESSAGE_ROUTE, {
+    const response = await postToNodeServer(Routes.SEND_MESSAGE_ROUTE, {
       from: username,
       to: friendUserName,
       message: chatbox.value,
       time: Date.now(),
-    }).then((response) => {
-      if (response.status === 200) {
-        chatbox.value = "";
-        updateUserData(dispatch, navigate);
-      } else {
-        console.log("error sending message", response);
-      }
     });
+
+    if (response.status === 200) {
+      chatbox.value = "";
+      updateUserData(dispatch, navigate);
+    }
   };
 
   return (

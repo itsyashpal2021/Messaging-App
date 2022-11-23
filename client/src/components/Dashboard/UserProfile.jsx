@@ -11,14 +11,13 @@ export function UserProfile(props) {
   const userData = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const onLogout = () => {
-    postToNodeServer(Routes.LOGOUT_ROUTE, {}).then((response) => {
-      if (response.status === 200) {
-        dispatch(setUser({}));
-        dispatch(setActiveChat({}));
-        navigate(Routes.LOGIN_ROUTE);
-      }
-    });
+  const onLogout = async () => {
+    const response = await postToNodeServer(Routes.LOGOUT_ROUTE, {});
+    if (response.status === 200) {
+      dispatch(setUser({}));
+      dispatch(setActiveChat({}));
+      navigate(Routes.LOGIN_ROUTE);
+    }
   };
 
   return (

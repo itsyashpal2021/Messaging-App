@@ -18,37 +18,30 @@ export function SearchUser(props) {
     useSelector((state) => state.user.friendRequestsSent)
   );
 
-  const onSearch = (event) => {
+  const onSearch = async (event) => {
     const searchedUser = event.target.value;
     if (searchedUser === "") {
       setSearchResult([]);
       return;
     }
-    postToNodeServer(Routes.SEARCH_USER_ROUTE, {
+    const response = await postToNodeServer(Routes.SEARCH_USER_ROUTE, {
       searchedUser: searchedUser,
       currentUser: username,
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        setSearchResult(response.users);
-      });
+    });
+    if (response.status === 200) setSearchResult(response.users);
   };
 
-  const addFriend = (event, friendRequestUsername) => {
-    postToNodeServer(Routes.FRIEND_REQUEST_ROUTE, {
+  const addFriend = async (event, friendRequestUsername) => {
+    const response = await postToNodeServer(Routes.FRIEND_REQUEST_ROUTE, {
       username: username,
       friendRequestUsername: friendRequestUsername,
-    }).then((response) => {
-      if (response.status === 200) {
-        const btn = event.target;
-        btn.classList.remove("fa-user");
-        btn.classList.add("fa-check");
-        btn.classList.add("text-success");
-      } else {
-        console.log("error while sending friend request");
-        console.log(response);
-      }
     });
+    if (response.status === 200) {
+      const btn = event.target;
+      btn.classList.remove("fa-user");
+      btn.classList.add("fa-check");
+      btn.classList.add("text-success");
+    }
   };
 
   return (

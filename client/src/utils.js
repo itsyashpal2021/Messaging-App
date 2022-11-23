@@ -14,31 +14,49 @@ export const Routes = {
 };
 
 export const getFormValues = (event) => {
-  //extracting values of inputs from form
+  //extracting values of all inputs from form
   let form = event.target;
   let formData = new FormData(form);
   let formValues = Object.fromEntries(formData);
   return formValues;
 };
 
-export const postToNodeServer = (route, bodyJson) => {
-  return fetch(route, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(bodyJson),
-  });
+export const postToNodeServer = async (
+  route,
+  bodyJson,
+  errorhandled = false
+) => {
+  try {
+    let response = await fetch(route, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bodyJson),
+    });
+    const status = response.status;
+    if (status === 401) {
+      return { status: 401 };
+    }
+    response = await response.json();
+    if (status === 400 && errorhandled === false) throw response.message;
+    return { ...response, status: status };
+  } catch (error) {
+    console.error("Error sending post to nodeserver", error);
+  }
 };
 
-export const updateUserData = (dispatch, navigate) => {
-  postToNodeServer(Routes.USER_ROUTE, {}).then((response) => {
+export const updateUserData = async (dispatch, navigate) => {
+  try {
+    const response = await postToNodeServer(Routes.USER_ROUTE, {});
     if (response.status === 401) {
       dispatch(setUser({}));
       navigate(Routes.LOGIN_ROUTE);
     } else if (response.status === 200) {
-      response.json().then((response) => {
-        dispatch(setUser(response));
-        console.log("User Data Updated");
-      });
+      dispatch(setUser(response));
+      console.log("User Data Updated");
+    } else {
+      console.log("Recieved invalid response", response);
     }
-  });
+  } catch (error) {
+    console.error("Error while updating userData", error.message);
+  }
 };

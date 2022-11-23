@@ -8,8 +8,7 @@ export function RegisterForm(props) {
   const [labelVisible, setLabelVisible] = useState(false);
   const [labelText, setLabelText] = useState("");
 
-  const onSubmit = (event) => {
-    //prevent refresh
+  const onSubmit = async (event) => {
     event.preventDefault();
     const formValues = getFormValues(event);
 
@@ -21,17 +20,18 @@ export function RegisterForm(props) {
     }
     delete formValues.confirmPassword;
 
-    postToNodeServer(Routes.REGISTER_ROUTE, formValues)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.message === "SUCCESS") {
-          setLabelVisible(false);
-          navigate(Routes.USER_ROUTE);
-        } else {
-          setLabelVisible(true);
-          setLabelText(response.message);
-        }
-      });
+    const response = await postToNodeServer(
+      Routes.REGISTER_ROUTE,
+      formValues,
+      true
+    );
+    if (response.status === 200) {
+      setLabelVisible(false);
+      navigate(Routes.USER_ROUTE);
+    } else {
+      setLabelVisible(true);
+      setLabelText(response.message);
+    }
   };
 
   return (
