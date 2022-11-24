@@ -15,9 +15,7 @@ const userSchema = new mongoose.Schema({
   gender: String,
   friendList: [
     {
-      username: String,
-      firstName: String,
-      lastName: String,
+      type: String,
     },
   ],
   friendRequestsSent: [

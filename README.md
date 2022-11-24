@@ -13,8 +13,8 @@ Tech stack : react (frontend) + nodeJs
 
 TODO:
 
-when to update data
+when to update data  --> rerendering issue.
 emojis
 scrollbar styling
-separate profile picture component
-friendlist sorted by messagetime
+separate profile picture component (images upload in drive and save url in mongo)
+friendlist hover effect fix

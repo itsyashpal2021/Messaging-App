@@ -47,6 +47,49 @@ const loadUser = async (req, res) => {
 
       const userData = { ...req.user._doc, messages: messages };
 
+      //populate friend list with friend details and last messages
+      userData.friendList = await Promise.all(
+        userData.friendList.map(async (friendUserName) => {
+          const friendUser = await User.findOne({ username: friendUserName });
+          const lastMessage = await Message.find({
+            $or: [
+              {
+                $and: [
+                  { from: userData.username },
+                  { to: friendUser.username },
+                ],
+              },
+              {
+                $and: [
+                  { to: userData.username },
+                  { from: friendUser.username },
+                ],
+              },
+            ],
+          })
+            .limit(1)
+            .sort({
+              time: "desc",
+            });
+
+          return {
+            username: friendUser.username,
+            firstName: friendUser.firstName,
+            lastName: friendUser.lastName,
+            lastMessage: lastMessage[0].message,
+            lastMessageTime: lastMessage[0].time,
+          };
+        })
+      );
+      //sort friend list according to lastMessage time
+      userData.friendList.sort((a, b) =>
+        a.lastMessageTime < b.lastMessageTime
+          ? 1
+          : a.lastMessageTime > b.lastMessageTime
+          ? -1
+          : 0
+      );
+
       res.status(200).json(userData);
     } else {
       res.status(401).send();
@@ -131,11 +174,7 @@ const acceptFriendRequest = async (req, res) => {
     });
 
     //user changes
-    user.friendList.push({
-      username: friendUser.username,
-      firstName: friendUser.firstName,
-      lastName: friendUser.lastName,
-    });
+    user.friendList.push(friendUser.username);
     user.friendRequestsRecieved = user.friendRequestsRecieved.filter(
       (item) => item !== friendRequestUsername
     );
@@ -146,11 +185,7 @@ const acceptFriendRequest = async (req, res) => {
     await user.save();
 
     // friendUser change
-    friendUser.friendList.push({
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    });
+    friendUser.friendList.push(user.username);
     friendUser.friendRequestsSent = friendUser.friendRequestsSent.filter(
       (item) => item !== username
     );

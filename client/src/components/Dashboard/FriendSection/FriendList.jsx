@@ -9,31 +9,37 @@ export function FriendList(props) {
   return (
     <div
       className="container-fluid p-0 h-100"
-      style={{ overflowY: "scroll", backgroundColor: "rgb(66 69 98)" }}
+      style={{
+        overflowY: "scroll",
+        backgroundColor: "rgb(66 69 98)",
+        borderTop: "1px solid #191919",
+      }}
     >
       {friendList.map((friend) => {
         return (
           <div
             key={friend.username}
-            className="friendDiv container-fluid py-2 px-3"
+            className="friendDiv container-fluid py-2 px-sm-3 px-1"
             style={{
               display: "flex",
               userSelect: "none",
+              borderBottom: "1px solid #191919",
               backgroundColor:
                 activeChat.username !== undefined &&
                 activeChat.username === friend.username
                   ? "rgb(47 50 75)"
                   : "inherit",
             }}
-            onMouseEnter={(event) => {
+            onMouseOver={(event) => {
               if (
                 activeChat.username === undefined ||
                 activeChat.username !== friend.username
               )
-                event.target.style.backgroundColor = "rgb(57 60 85)";
+                event.target.closest(".friendDiv").style.backgroundColor =
+                  "rgb(57 60 85)";
             }}
-            onMouseLeave={(event) => {
-              event.target.style.backgroundColor =
+            onMouseOut={(event) => {
+              event.target.closest(".friendDiv").style.backgroundColor =
                 activeChat.username !== undefined &&
                 activeChat.username === friend.username
                   ? "rgb(47 50 75)"
@@ -54,9 +60,22 @@ export function FriendList(props) {
             >
               <i className="fa-solid fa-user" />
             </div>
-            <span className="fs-3 text-white bg-transparent">
-              {friend.firstName} {friend.lastName}
-            </span>
+            <div className="d-flex flex-column w-100  ">
+              <span className="fs-3 text-white lh-1">
+                {friend.firstName} {friend.lastName}
+              </span>
+              <div className="d-flex align-items-center justify-content-between mt-1">
+                <span className="fs-6" style={{ color: "#e5e5ac" }}>
+                  {friend.lastMessage}
+                </span>
+                <span className="text-muted" style={{ fontSize: "10px" }}>
+                  {new Date(friend.lastMessageTime).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+              </div>
+            </div>
           </div>
         );
       })}
