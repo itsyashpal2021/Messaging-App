@@ -26,9 +26,13 @@ export function UserDashboard(props) {
     <Loading />
   ) : (
     <div className="container-fluid row m-0 p-0 h-100">
-      <div className="col-12 col-md-5 col-xxl-4 d-flex flex-column p-0">
-        <UserProfile />
-        <FriendSection />
+      <div className="col-12 col-md-5 col-xxl-4 p-0 h-100">
+        <div
+          className="d-flex flex-column h-100 container-fluid p-0"
+        >
+          <UserProfile />
+          <FriendSection />
+        </div>
       </div>
       <Chat />
     </div>

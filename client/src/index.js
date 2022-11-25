@@ -7,6 +7,7 @@ import { Routes } from "./utils";
 import { UserDashboard } from "./components/Dashboard/UserDashboard";
 import store from "./state/store";
 import { Provider } from "react-redux";
+import "./Css/Scrollbar.css";
 
 const router = createBrowserRouter([
   {

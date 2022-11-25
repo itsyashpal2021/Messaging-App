@@ -6,7 +6,7 @@ export function FriendSection(props) {
   return (
     <div
       className="container-fluid h-100 p-0 d-flex flex-column"
-      style={{ backgroundColor: "#51557E" }}
+      style={{ backgroundColor: "#51557E", overflowY: "scroll" }}
     >
       <FriendRequests />
       <SearchUser />

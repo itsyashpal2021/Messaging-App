@@ -10,7 +10,6 @@ export function FriendList(props) {
     <div
       className="container-fluid p-0 h-100"
       style={{
-        overflowY: "scroll",
         backgroundColor: "rgb(66 69 98)",
         borderTop: "1px solid #191919",
       }}
