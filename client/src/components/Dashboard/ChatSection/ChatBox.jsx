@@ -1,16 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Routes, postToNodeServer, updateUserData } from "../../../utils";
+import { Routes, postToNodeServer, getFriendData } from "../../../utils";
 import EmojiPicker from "emoji-picker-react";
 import { useState } from "react";
 
 export function ChatBox(props) {
   const [showEmojis, setShowEmojis] = useState(false);
 
-  const username = useSelector((state) => state.user.username);
+  const username = useSelector((state) => state.userData.username);
   const friendUserName = useSelector((state) => state.activeChat.username);
-
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const sendMessage = async () => {
@@ -25,8 +22,8 @@ export function ChatBox(props) {
     });
 
     if (response.status === 200) {
+      getFriendData(dispatch);
       chatbox.value = "";
-      updateUserData(dispatch, navigate);
     }
   };
 

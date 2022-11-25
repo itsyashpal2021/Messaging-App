@@ -1,21 +1,21 @@
 import "../../Css/SearchUser.css";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postToNodeServer, Routes } from "../../utils";
-import { setActiveChat } from "../../state/activeChatSlice";
+import { getFriendData, postToNodeServer, Routes } from "../../utils";
+import { setActiveChat } from "../../state/slices";
 
 export function SearchUser(props) {
   const [searchResult, setSearchResult] = useState([]);
   const dispatch = useDispatch();
 
-  const username = useSelector((state) => state.user.username);
+  const username = useSelector((state) => state.userData.username);
   const friendUsernameList = new Set(
-    useSelector((state) => state.user.friendList).map((friend) => {
+    useSelector((state) => state.friendData.friendList).map((friend) => {
       return friend.username;
     })
   );
   const friendRequestSent = new Set(
-    useSelector((state) => state.user.friendRequestsSent)
+    useSelector((state) => state.friendData.friendRequestsSent)
   );
 
   const onSearch = async (event) => {
@@ -41,6 +41,7 @@ export function SearchUser(props) {
       btn.classList.remove("fa-user");
       btn.classList.add("fa-check");
       btn.classList.add("text-success");
+      getFriendData(dispatch);
     }
   };
 

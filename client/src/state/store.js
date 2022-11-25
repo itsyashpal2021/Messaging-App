@@ -1,10 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./userSlice";
-import activeChatReducer from "./activeChatSlice";
+import reducers from "./slices.js";
 
 export default configureStore({
-  reducer: {
-    user: userReducer,
-    activeChat: activeChatReducer,
-  },
+  reducer: reducers,
 });

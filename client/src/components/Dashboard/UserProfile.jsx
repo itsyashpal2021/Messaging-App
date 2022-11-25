@@ -2,13 +2,13 @@ import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../../Css/UserProfile.css";
-import { setActiveChat } from "../../state/activeChatSlice";
-import { setUser } from "../../state/userSlice";
+import { setActiveChat } from "../../state/slices";
+import { setUser } from "../../state/slices";
 import { postToNodeServer, Routes } from "../../utils";
 
 export function UserProfile(props) {
   let navigate = useNavigate();
-  const userData = useSelector((state) => state.user);
+  const userData = useSelector((state) => state.userData);
   const dispatch = useDispatch();
 
   const onLogout = async () => {

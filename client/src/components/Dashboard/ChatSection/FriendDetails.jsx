@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveChat } from "../../../state/activeChatSlice";
+import { setActiveChat } from "../../../state/slices";
 
 export function FriendDetails(props) {
   const friend = useSelector((state) => state.activeChat);

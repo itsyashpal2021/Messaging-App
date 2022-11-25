@@ -12,6 +12,9 @@ const {
   acceptFriendRequest,
   rejectFriendRequest,
   sendMessage,
+  checkSession,
+  getFriendData,
+  getMessages,
 } = require("./posts/posts.js");
 
 const app = express();
@@ -42,13 +45,16 @@ connectToDb();
 
 //handle all post requests from client.
 app.post("/register", onRegister);
+app.post("/checkSession", checkSession);
 app.post("/login", onLogin);
 app.post("/user", loadUser);
+app.post("/friendData", getFriendData);
 app.post("/logout", onLogout);
 app.post("/searchUser", onUserSearch);
 app.post("/friendRequest", onSendFriendRequest);
 app.post("/acceptFriendRequest", acceptFriendRequest);
 app.post("/rejectFriendRequest", rejectFriendRequest);
+app.post("/getMessages", getMessages);
 app.post("/sendMessage", sendMessage);
 
 app.listen(port, () => {

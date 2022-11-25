@@ -13,5 +13,5 @@ Tech stack : react (frontend) + nodeJs
 
 TODO:
 
-when to update data --> rerendering issue.
-separate profile picture component (images upload in drive and save url in mongo)
+better fetching of data rather than interval posts?
+separate profile picture component (images upload in drive/aws and save url in mongo)

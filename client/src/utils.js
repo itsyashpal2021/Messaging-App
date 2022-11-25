@@ -1,9 +1,11 @@
-import { setUser } from "./state/userSlice";
+import { setFriendData, setUser } from "./state/slices";
 
 export const Routes = {
   REGISTER_ROUTE: "/register",
+  CHECK_SESSION_ROUTE: "/checkSession",
   LOGIN_ROUTE: "/login",
   USER_ROUTE: "/user",
+  FRIEND_DATA_ROUTE: "/friendData",
   LOGOUT_ROUTE: "/logout",
   SEARCH_USER_ROUTE: "/searchUser",
   FRIEND_REQUEST_ROUTE: "/friendRequest",
@@ -44,7 +46,7 @@ export const postToNodeServer = async (
   }
 };
 
-export const updateUserData = async (dispatch, navigate) => {
+export const getUserData = async (dispatch, navigate) => {
   try {
     const response = await postToNodeServer(Routes.USER_ROUTE, {});
     if (response.status === 401) {
@@ -57,6 +59,16 @@ export const updateUserData = async (dispatch, navigate) => {
       console.log("Recieved invalid response", response);
     }
   } catch (error) {
-    console.error("Error while updating userData", error.message);
+    console.error("Error while fetching userData", error.message);
+  }
+};
+
+export const getFriendData = async (dispatch) => {
+  try {
+    const response = await postToNodeServer(Routes.FRIEND_DATA_ROUTE, {});
+    dispatch(setFriendData(response));
+    console.log("Friend Data updated");
+  } catch (error) {
+    console.error("Error while fetching friendData", error.message);
   }
 };

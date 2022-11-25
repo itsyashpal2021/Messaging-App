@@ -19,6 +19,15 @@ const onRegister = async (req, res) => {
   }
 };
 
+const checkSession = async (req, res) => {
+  try {
+    const sessionActive = req.isAuthenticated();
+    res.status(200).json({ sessionActive: sessionActive });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const onLogin = async (req, res) => {
   try {
     const user = new User(req.body);
@@ -39,61 +48,78 @@ const onLogin = async (req, res) => {
 const loadUser = async (req, res) => {
   try {
     if (req.isAuthenticated()) {
-      const messages = await Message.find({
-        $or: [{ to: req.user.username }, { from: req.user.username }],
-      }).sort({
-        time: "asc",
+      const userData = req.user.toObject();
+
+      res.status(200).json({
+        username: userData.username,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
       });
-
-      const userData = { ...req.user._doc, messages: messages };
-
-      //populate friend list with friend details and last messages
-      userData.friendList = await Promise.all(
-        userData.friendList.map(async (friendUserName) => {
-          const friendUser = await User.findOne({ username: friendUserName });
-          const lastMessage = await Message.find({
-            $or: [
-              {
-                $and: [
-                  { from: userData.username },
-                  { to: friendUser.username },
-                ],
-              },
-              {
-                $and: [
-                  { to: userData.username },
-                  { from: friendUser.username },
-                ],
-              },
-            ],
-          })
-            .limit(1)
-            .sort({
-              time: "desc",
-            });
-
-          return {
-            username: friendUser.username,
-            firstName: friendUser.firstName,
-            lastName: friendUser.lastName,
-            lastMessage: lastMessage[0].message,
-            lastMessageTime: lastMessage[0].time,
-          };
-        })
-      );
-      //sort friend list according to lastMessage time
-      userData.friendList.sort((a, b) =>
-        a.lastMessageTime < b.lastMessageTime
-          ? 1
-          : a.lastMessageTime > b.lastMessageTime
-          ? -1
-          : 0
-      );
-
-      res.status(200).json(userData);
     } else {
       res.status(401).send();
     }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const getFriendData = async (req, res) => {
+  try {
+    if (!req.isAuthenticated()) res.sendStatus(401);
+
+    const userData = req.user.toObject();
+
+    //populate friend list with friend details and last messages
+    userData.friendList = await Promise.all(
+      userData.friendList.map(async (friendUserName) => {
+        const friendUser = await User.findOne({ username: friendUserName });
+        let messages = await Message.find({
+          $or: [
+            {
+              $and: [{ from: userData.username }, { to: friendUser.username }],
+            },
+            {
+              $and: [{ to: userData.username }, { from: friendUser.username }],
+            },
+          ],
+        }).sort({
+          time: "desc",
+        });
+
+        if (messages.length === 0) {
+          messages = [
+            {
+              message: "",
+              time: 0,
+            },
+          ];
+        }
+
+        return {
+          username: friendUser.username,
+          firstName: friendUser.firstName,
+          lastName: friendUser.lastName,
+          lastMessage: messages[0].message,
+          lastMessageTime: messages[0].time,
+        };
+      })
+    );
+
+    //sort friend list according to lastMessage time
+    userData.friendList.sort((a, b) =>
+      a.lastMessageTime < b.lastMessageTime
+        ? 1
+        : a.lastMessageTime > b.lastMessageTime
+        ? -1
+        : 0
+    );
+
+    res.status(200).json({
+      friendList: userData.friendList,
+      friendRequestsRecieved: userData.friendRequestsRecieved,
+      friendRequestsSent: userData.friendRequestsSent,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -228,6 +254,27 @@ const rejectFriendRequest = async (req, res) => {
   }
 };
 
+const getMessages = async (req, res) => {
+  try {
+    const messages = await Message.find({
+      $or: [
+        {
+          $and: [{ from: req.body.username }, { to: req.body.friendUserName }],
+        },
+        {
+          $and: [{ from: req.body.friendUserName }, { to: req.body.username }],
+        },
+      ],
+    }).sort({
+      time: "asc",
+    });
+
+    res.status(200).json({ messages: messages });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const sendMessage = async (req, res) => {
   try {
     const message = new Message(req.body);
@@ -240,12 +287,15 @@ const sendMessage = async (req, res) => {
 
 module.exports = {
   onRegister,
+  checkSession,
   onLogin,
   loadUser,
+  getFriendData,
   onLogout,
   onUserSearch,
   onSendFriendRequest,
   acceptFriendRequest,
   rejectFriendRequest,
+  getMessages,
   sendMessage,
 };

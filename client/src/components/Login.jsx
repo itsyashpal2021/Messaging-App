@@ -1,20 +1,36 @@
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { setActiveChat } from "../state/activeChatSlice.js";
+import { setActiveChat } from "../state/slices";
 import { getFormValues, postToNodeServer, Routes } from "../utils.js";
 
 export function LoginForm(props) {
-  let navigate = useNavigate();
-  const [labelVisible, setLabelVisible] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [labelVisible, setLabelVisible] = useState(false);
+  const [sessionActive, setSessionActive] = useState(true);
+
+  useEffect(
+    () =>
+      async function () {
+        const response = await postToNodeServer(Routes.CHECK_SESSION_ROUTE, {});
+        if (response.sessionActive) {
+          navigate(Routes.USER_ROUTE);
+        } else {
+          setSessionActive(false);
+        }
+      },
+    [navigate, sessionActive]
+  );
 
   const onSubmit = async (event) => {
     event.preventDefault();
     const formValues = getFormValues(event);
 
     const response = await postToNodeServer(Routes.LOGIN_ROUTE, formValues);
+
     if (response.status === 401) {
       setLabelVisible(true);
     } else if (response.status === 200) {
@@ -24,7 +40,9 @@ export function LoginForm(props) {
     }
   };
 
-  return (
+  return sessionActive ? (
+    <></>
+  ) : (
     <div className="container-xl">
       <form onSubmit={onSubmit}>
         <div className="container-fluid py-5">

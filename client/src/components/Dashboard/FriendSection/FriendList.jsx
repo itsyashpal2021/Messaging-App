@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveChat } from "../../../state/activeChatSlice";
+import { setActiveChat } from "../../../state/slices";
 
 export function FriendList(props) {
-  const friendList = useSelector((state) => state.user.friendList);
+  const friendList = useSelector((state) => state.friendData.friendList);
   const activeChat = useSelector((state) => state.activeChat);
   const dispatch = useDispatch();
 
@@ -68,10 +68,12 @@ export function FriendList(props) {
                   {friend.lastMessage}
                 </span>
                 <span className="text-muted" style={{ fontSize: "10px" }}>
-                  {new Date(friend.lastMessageTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {friend.lastMessageTime === 0
+                    ? ""
+                    : new Date(friend.lastMessageTime).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                 </span>
               </div>
             </div>

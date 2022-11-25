@@ -1,17 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Routes } from "../../../utils";
+import { postToNodeServer } from "../../../utils";
 
 export function MessageBox(props) {
   let lastDate = "";
-  const friend = useSelector((state) => state.activeChat.username);
-  const messages = useSelector((state) => state.user.messages).filter(
-    (message) => message.to === friend || message.from === friend
-  );
+  const username = useSelector((state) => state.userData.username);
+  const friendUserName = useSelector((state) => state.activeChat.username);
+  const [messages, setMessages] = useState([]);
+
+  const getMessages = async () => {
+    const response = await postToNodeServer(Routes.GET_MESSAGES_ROUTE, {
+      username: username,
+      friendUserName: friendUserName,
+    });
+    if (JSON.stringify(messages) !== JSON.stringify(response.messages)) {
+      setMessages(response.messages);
+      console.log("Messages Updated");
+    }
+  };
 
   useEffect(() => {
+    getMessages();
+    //update messages every 2 seconds
+    const intervalId = setInterval(getMessages, 2000);
+
     //scroll to bottom
     const messageBox = document.getElementById("messageBox");
     messageBox.scrollTop = messageBox.scrollHeight;
+
+    return () => clearInterval(intervalId);
   });
 
   return (
@@ -21,7 +39,7 @@ export function MessageBox(props) {
       style={{ overflowY: "scroll", backgroundColor: "inherit" }}
     >
       {messages.map((message) => {
-        const isRecieved = message.from === friend;
+        const isRecieved = message.from === friendUserName;
 
         const dateObject = new Date(message.time);
         dateObject.setSeconds(0, 0);

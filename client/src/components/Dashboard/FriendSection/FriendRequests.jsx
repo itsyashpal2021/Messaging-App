@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { postToNodeServer, Routes, updateUserData } from "../../../utils";
+import { postToNodeServer, Routes, getFriendData } from "../../../utils";
 
 export function FriendRequests(props) {
   const [showRequests, setShowRequets] = useState(false);
 
-  const username = useSelector((state) => state.user.username);
+  const username = useSelector((state) => state.userData.username);
   const friendRequests = useSelector(
-    (state) => state.user.friendRequestsRecieved
+    (state) => state.friendData.friendRequestsRecieved
   );
+
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const toggleShowRequests = (event) => {
     const target = event.target;
@@ -34,7 +33,7 @@ export function FriendRequests(props) {
       }
     );
     if (response.status === 200) {
-      updateUserData(dispatch, navigate);
+      getFriendData(dispatch);
     }
   };
 
@@ -47,7 +46,7 @@ export function FriendRequests(props) {
       }
     );
     if (response.status === 200) {
-      updateUserData(dispatch, navigate);
+      getFriendData(dispatch);
     }
   };
 
