@@ -14,21 +14,24 @@ export function ChatBox(props) {
     const chatbox = document.getElementById("chatbox");
     if (chatbox.value === "") return;
 
-    const response = await postToNodeServer(Routes.SEND_MESSAGE_ROUTE, {
+    const message = {
       from: username,
       to: friendUserName,
       message: chatbox.value,
       time: Date.now(),
-    });
+    };
+
+    const response = await postToNodeServer(Routes.SEND_MESSAGE_ROUTE, message);
 
     if (response.status === 200) {
       getFriendData(dispatch);
       chatbox.value = "";
+      props.emitMessage(message);
     }
   };
 
   return (
-    <div className="container-fluid pt-2 pb-1 px-1">
+    <div className="container-fluid py-2 px-1">
       <div className="row gx-1 px-1">
         <div className="col-sm-11 col-md-10 col-lg-11 col-10 d-flex">
           <i

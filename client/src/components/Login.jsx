@@ -12,18 +12,17 @@ export function LoginForm(props) {
   const [labelVisible, setLabelVisible] = useState(false);
   const [sessionActive, setSessionActive] = useState(true);
 
-  useEffect(
-    () =>
-      async function () {
-        const response = await postToNodeServer(Routes.CHECK_SESSION_ROUTE, {});
-        if (response.sessionActive) {
-          navigate(Routes.USER_ROUTE);
-        } else {
-          setSessionActive(false);
-        }
-      },
-    [navigate, sessionActive]
-  );
+  useEffect(() => {
+    async function checkSession() {
+      const response = await postToNodeServer(Routes.CHECK_SESSION_ROUTE, {});
+      if (response.sessionActive) {
+        navigate(Routes.USER_ROUTE);
+      } else {
+        setSessionActive(false);
+      }
+    }
+    checkSession();
+  });
 
   const onSubmit = async (event) => {
     event.preventDefault();

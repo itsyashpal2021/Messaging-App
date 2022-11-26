@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { FriendDetails } from "./FriendDetails";
 import { MessageBox } from "./MessageBox";
-import { ChatBox } from "./ChatBox";
 
 export function Chat(props) {
   const activeChat = useSelector((state) => state.activeChat);
@@ -27,7 +26,6 @@ export function Chat(props) {
         <div className="d-flex h-100 flex-column container-fluid p-0">
           <FriendDetails />
           <MessageBox />
-          <ChatBox />
         </div>
       )}
     </div>

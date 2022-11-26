@@ -57,6 +57,26 @@ app.post("/rejectFriendRequest", rejectFriendRequest);
 app.post("/getMessages", getMessages);
 app.post("/sendMessage", sendMessage);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}.`);
+});
+
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("Connected to socket.io");
+
+  socket.on("setup", (username) => {
+    socket.join(username);
+    socket.emit("connected");
+  });
+
+  socket.on("send message", (message) => {
+    socket.in(message.to).emit("new message", message);
+  });
 });

@@ -66,9 +66,12 @@ const loadUser = async (req, res) => {
 
 const getFriendData = async (req, res) => {
   try {
-    if (!req.isAuthenticated()) res.sendStatus(401);
+    if (!req.isAuthenticated()) {
+      res.status(401).send();
+      return;
+    }
 
-    const userData = req.user.toObject();
+    const userData = await req.user.toObject();
 
     //populate friend list with friend details and last messages
     userData.friendList = await Promise.all(
