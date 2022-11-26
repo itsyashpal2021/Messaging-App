@@ -22,7 +22,7 @@ export function LoginForm(props) {
       }
     }
     checkSession();
-  });
+  }, [navigate]);
 
   const onSubmit = async (event) => {
     event.preventDefault();

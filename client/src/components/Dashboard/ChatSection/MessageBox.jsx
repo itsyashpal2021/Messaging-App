@@ -5,7 +5,7 @@ import { postToNodeServer } from "../../../utils";
 import { io } from "socket.io-client";
 import { ChatBox } from "./ChatBox";
 
-const ENDPOINT = "http://localhost:8080";
+// const ENDPOINT = "http://localhost:8080";
 var socket;
 
 export function MessageBox(props) {
@@ -29,9 +29,10 @@ export function MessageBox(props) {
     getMessages();
 
     if (!socketConnected) {
-      socket = io(ENDPOINT);
+      socket = io();
       socket.emit("setup", username);
       socket.on("connected", () => {
+        console.log("connected to socket");
         setSocketConnected(true);
       });
     }
@@ -55,6 +56,7 @@ export function MessageBox(props) {
   const emitMessage = (message) => {
     if (socketConnected) {
       socket.emit("send message", message);
+      console.log("emitted");
     }
     setMessages([...messages, message]);
   };

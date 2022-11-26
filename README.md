@@ -13,5 +13,6 @@ Tech stack : react (frontend) + nodeJs
 
 TODO:
 
-better fetching of data rather than interval posts?
+better fetching of friend data rather than interval posts --> state updates
 separate profile picture component (images upload in drive/aws and save url in mongo)
+check all comps rendering ...

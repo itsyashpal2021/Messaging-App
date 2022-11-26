@@ -16,6 +16,7 @@ const {
   getFriendData,
   getMessages,
 } = require("./posts/posts.js");
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -25,7 +26,7 @@ app.use(express.json());
 //initialize session
 app.use(
   session({
-    secret: "keyboard cat",
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
   })
@@ -73,6 +74,7 @@ io.on("connection", (socket) => {
 
   socket.on("setup", (username) => {
     socket.join(username);
+    console.log("joined room", username);
     socket.emit("connected");
   });
 
