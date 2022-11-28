@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { postToNodeServer, Routes, getFriendData } from "../../../utils";
+import { useSelector } from "react-redux";
+import { postToNodeServer, Routes } from "../../../utils";
 
 export function FriendRequests(props) {
   const [showRequests, setShowRequets] = useState(false);
@@ -9,8 +9,6 @@ export function FriendRequests(props) {
   const friendRequests = useSelector(
     (state) => state.friendData.friendRequestsRecieved
   );
-
-  const dispatch = useDispatch();
 
   const toggleShowRequests = (event) => {
     const target = event.target;
@@ -33,7 +31,7 @@ export function FriendRequests(props) {
       }
     );
     if (response.status === 200) {
-      getFriendData(dispatch);
+      // getFriendData(dispatch);
     }
   };
 
@@ -46,7 +44,7 @@ export function FriendRequests(props) {
       }
     );
     if (response.status === 200) {
-      getFriendData(dispatch);
+      // getFriendData(dispatch);
     }
   };
 

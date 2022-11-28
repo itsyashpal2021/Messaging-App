@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../../Css/UserProfile.css";
-import { setActiveChat } from "../../state/slices";
+import { setActiveChat, setFriendData } from "../../state/slices";
 import { setUser } from "../../state/slices";
 import { postToNodeServer, Routes } from "../../utils";
 
@@ -15,6 +15,13 @@ export function UserProfile(props) {
     const response = await postToNodeServer(Routes.LOGOUT_ROUTE, {});
     if (response.status === 200) {
       dispatch(setUser({}));
+      dispatch(
+        setFriendData({
+          friendList: [],
+          friendRequestsRecieved: [],
+          friendRequestsSent: [],
+        })
+      );
       dispatch(setActiveChat({}));
       navigate(Routes.LOGIN_ROUTE);
     }

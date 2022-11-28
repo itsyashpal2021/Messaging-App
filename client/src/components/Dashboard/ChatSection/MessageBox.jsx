@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriendData, Routes } from "../../../utils";
+import { Routes } from "../../../utils";
 import { postToNodeServer } from "../../../utils";
 import { io } from "socket.io-client";
 import { ChatBox } from "./ChatBox";
@@ -32,7 +32,7 @@ export function MessageBox(props) {
       socket = io();
       socket.emit("setup", username);
       socket.on("connected", () => {
-        console.log("connected to socket");
+        console.log("messagebox connected to socket");
         setSocketConnected(true);
       });
     }
@@ -44,7 +44,6 @@ export function MessageBox(props) {
       socket.once("new message", (message) => {
         if (message.from === friendUserName)
           setMessages([...messages, message]);
-        else getFriendData(dispatch);
       });
     }
 
@@ -56,7 +55,6 @@ export function MessageBox(props) {
   const emitMessage = (message) => {
     if (socketConnected) {
       socket.emit("send message", message);
-      console.log("emitted");
     }
     setMessages([...messages, message]);
   };

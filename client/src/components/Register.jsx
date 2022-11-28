@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFormValues, postToNodeServer, Routes } from "../utils";
 
@@ -7,6 +7,19 @@ export function RegisterForm(props) {
   let navigate = useNavigate();
   const [labelVisible, setLabelVisible] = useState(false);
   const [labelText, setLabelText] = useState("");
+  const [sessionActive, setSessionActive] = useState(true);
+
+  useEffect(() => {
+    async function checkSession() {
+      const response = await postToNodeServer(Routes.CHECK_SESSION_ROUTE, {});
+      if (response.sessionActive) {
+        navigate(Routes.USER_ROUTE);
+      } else {
+        setSessionActive(false);
+      }
+    }
+    checkSession();
+  }, [navigate]);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -34,7 +47,9 @@ export function RegisterForm(props) {
     }
   };
 
-  return (
+  return sessionActive ? (
+    <></>
+  ) : (
     <div className="container-xl">
       <form onSubmit={onSubmit}>
         <div className="container-fluid py-5">

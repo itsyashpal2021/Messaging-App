@@ -27,6 +27,25 @@ export const friendDataSlice = createSlice({
       state.friendRequestsSent = action.payload.friendRequestsSent;
       state.friendRequestsRecieved = action.payload.friendRequestsRecieved;
     },
+    setFriendList: (state, action) => {
+      state.friendList = action.payload;
+    },
+    updateLastMessage: (state, action) => {
+      const newFriendList = JSON.parse(JSON.stringify(state.friendList));
+      const ind = newFriendList.findIndex(
+        (friend) => friend.username === action.payload.username
+      );
+
+      if (ind === -1) {
+        console.error("Friend not found in friendList.");
+        return;
+      }
+
+      newFriendList[ind].lastMessage = action.payload.lastMessage;
+      newFriendList[ind].lastMessageTime = action.payload.lastMessageTime;
+
+      state.friendList = newFriendList;
+    },
   },
 });
 
@@ -45,7 +64,8 @@ export const activeChatSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const { setUser } = userSlice.actions;
-export const { setFriendData } = friendDataSlice.actions;
+export const { setFriendData, setFriendList, updateLastMessage } =
+  friendDataSlice.actions;
 export const { setActiveChat } = activeChatSlice.actions;
 
 export default combineReducers({

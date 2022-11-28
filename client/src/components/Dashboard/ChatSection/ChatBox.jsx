@@ -1,17 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Routes, postToNodeServer, getFriendData } from "../../../utils";
+import { Routes, postToNodeServer } from "../../../utils";
 import EmojiPicker from "emoji-picker-react";
 import { useState } from "react";
+import { updateLastMessage } from "../../../state/slices";
 
 export function ChatBox(props) {
   const [showEmojis, setShowEmojis] = useState(false);
+  const dispatch = useDispatch();
 
   const username = useSelector((state) => state.userData.username);
   const friendUserName = useSelector((state) => state.activeChat.username);
-  const dispatch = useDispatch();
 
   const sendMessage = async () => {
     const chatbox = document.getElementById("chatbox");
+    chatbox.focus();
     if (chatbox.value === "") return;
 
     const message = {
@@ -24,9 +26,15 @@ export function ChatBox(props) {
     const response = await postToNodeServer(Routes.SEND_MESSAGE_ROUTE, message);
 
     if (response.status === 200) {
-      getFriendData(dispatch);
       chatbox.value = "";
       props.emitMessage(message);
+      dispatch(
+        updateLastMessage({
+          username: message.to,
+          lastMessage: message.message,
+          lastMessageTime: message.time,
+        })
+      );
     }
   };
 
@@ -34,11 +42,15 @@ export function ChatBox(props) {
     <div className="container-fluid py-2 px-1">
       <div className="row gx-1 px-1">
         <div className="col-sm-11 col-md-10 col-lg-11 col-10 d-flex">
-          <i
-            className="fa-solid fa-face-laugh-beam text-warning fs-3 align-self-center me-md-2 me-1"
-            onClick={() => setShowEmojis(!showEmojis)}
-            style={{ cursor: "pointer" }}
-          />
+          {window.innerWidth >= 767 ? (
+            <i
+              className="fa-solid fa-face-laugh-beam text-warning fs-3 align-self-center me-md-2 me-1"
+              onClick={() => setShowEmojis(!showEmojis)}
+              style={{ cursor: "pointer" }}
+            />
+          ) : (
+            <></>
+          )}
           <input
             type="text"
             className="form-control-lg w-100 d-inline"
@@ -67,6 +79,7 @@ export function ChatBox(props) {
           <EmojiPicker
             theme="dark"
             autoFocusSearch={false}
+            lazyLoadEmojis={true}
             width="100%"
             height="335px"
             previewConfig={{

@@ -149,7 +149,7 @@ const onUserSearch = async (req, res) => {
     //find the usernames starting with searched username other than the current user
     let users = await User.find({
       $and: [
-        { username: { $regex: `^${searchedUser}` } },
+        { username: { $regex: `^${searchedUser}`, $options: "i" } },
         { username: { $not: { $regex: `^${currentUser}$` } } },
       ],
     }).limit(5);
