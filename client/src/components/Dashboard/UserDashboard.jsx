@@ -17,20 +17,15 @@ export function UserDashboard(props) {
 
   //update user data
   useEffect(() => {
-    console.log("Userdashboard useeffect.");
-    if (username === undefined) {
-      getUserData(dispatch, navigate);
-    } else {
-      setSocket(io());
-    }
-  }, [dispatch, navigate, username]);
+    getUserData(dispatch, navigate);
+    setSocket(io());
+  }, [dispatch, navigate]);
 
   useEffect(() => {
-    if (socket) {
+    if (socket && username) {
       socket.emit("setup", username);
       socket.on("connected", () => {
         console.log("user section connected to socket.io");
-        console.log(socket);
       });
     }
   }, [socket, username]);

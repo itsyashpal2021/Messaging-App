@@ -207,10 +207,6 @@ const acceptFriendRequest = async (req, res) => {
     user.friendRequestsRecieved = user.friendRequestsRecieved.filter(
       (item) => item !== friendRequestUsername
     );
-    // in case this user has also sent an request
-    user.friendRequestsSent = user.friendRequestsSent.filter(
-      (item) => item !== friendRequestUsername
-    );
     await user.save();
 
     // friendUser change
@@ -218,12 +214,12 @@ const acceptFriendRequest = async (req, res) => {
     friendUser.friendRequestsSent = friendUser.friendRequestsSent.filter(
       (item) => item !== username
     );
-    // in case other user has also recieved an request
-    friendUser.friendRequestsRecieved =
-      friendUser.friendRequestsRecieved.filter((item) => item !== username);
     await friendUser.save();
 
-    res.status(200).json({ message: "SUCCESS" });
+    res.status(200).json({
+      firstName: friendUser.firstName,
+      lastName: friendUser.lastName,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

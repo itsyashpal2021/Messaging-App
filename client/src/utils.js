@@ -1,4 +1,4 @@
-import { setUser } from "./state/slices";
+import { setUser, setFriendData } from "./state/slices";
 
 export const Routes = {
   REGISTER_ROUTE: "/register",
@@ -60,5 +60,15 @@ export const getUserData = async (dispatch, navigate) => {
     }
   } catch (error) {
     console.error("Error while fetching userData", error.message);
+  }
+};
+
+export const getFriendData = async (dispatch) => {
+  try {
+    const response = await postToNodeServer(Routes.FRIEND_DATA_ROUTE, {});
+    dispatch(setFriendData(response));
+    console.log("Friend Data updated");
+  } catch (error) {
+    console.error("Error while fetching friendData", error.message);
   }
 };

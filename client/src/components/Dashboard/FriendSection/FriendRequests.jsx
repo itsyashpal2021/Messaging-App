@@ -1,17 +1,26 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToFriendList,
+  removeFromFriendRequestsRecieved,
+} from "../../../state/slices";
 import { postToNodeServer, Routes } from "../../../utils";
 
 export function FriendRequests(props) {
   const [showRequests, setShowRequets] = useState(false);
+  const dispatch = useDispatch();
 
-  const username = useSelector((state) => state.userData.username);
+  const socket = props.socket;
+
+  const userData = useSelector((state) => state.userData);
+
+  const username = userData.username;
   const friendRequests = useSelector(
     (state) => state.friendData.friendRequestsRecieved
   );
 
   const toggleShowRequests = (event) => {
-    const target = event.target;
+    const target = document.getElementById("friendRequestLabel");
     if (showRequests) {
       target.classList.remove("fa-caret-down");
       target.classList.add("fa-caret-right");
@@ -31,7 +40,21 @@ export function FriendRequests(props) {
       }
     );
     if (response.status === 200) {
-      // getFriendData(dispatch);
+      const friend = {
+        username: friendRequestUsername,
+        firstName: response.firstName,
+        lastName: response.lastName,
+        lastMessage: "",
+        lastMessageTime: 0,
+      };
+      dispatch(removeFromFriendRequestsRecieved(friendRequestUsername));
+      dispatch(addToFriendList(friend));
+      socket.emit("friend request accepted", {
+        username: username,
+        friendRequestUsername: friendRequestUsername,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+      });
     }
   };
 
@@ -43,8 +66,12 @@ export function FriendRequests(props) {
         friendRequestUsername: friendRequestUsername,
       }
     );
-    if (response.status === 200) {
-      // getFriendData(dispatch);
+    if (response.status === 200 && socket) {
+      dispatch(removeFromFriendRequestsRecieved(friendRequestUsername));
+      socket.emit("friend request rejected", {
+        username: username,
+        friendRequestUsername: friendRequestUsername,
+      });
     }
   };
 
@@ -53,12 +80,12 @@ export function FriendRequests(props) {
       className="container-fluid p-2"
       style={{ backgroundColor: "rgb(29 44 70)" }}
     >
-      <div className="d-flex align-items-center text-warning">
-        <i
-          className="fa-solid fa-caret-right fs-4"
-          onClick={toggleShowRequests}
-          style={{ cursor: "pointer" }}
-        />
+      <div
+        className="d-flex align-items-center text-warning"
+        onClick={toggleShowRequests}
+        style={{ cursor: "pointer", width: "fit-content", userSelect: "none" }}
+      >
+        <i className="fa-solid fa-caret-right fs-4" id="friendRequestLabel" />
         <span className="h6 ms-2 m-0">Friend Requests</span>
         <div
           className="align-self-start ms-1 mt-1"

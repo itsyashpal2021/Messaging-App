@@ -16,6 +16,7 @@ const {
   getFriendData,
   getMessages,
 } = require("./posts/posts.js");
+const { request } = require("express");
 require("dotenv").config();
 
 const app = express();
@@ -80,5 +81,25 @@ io.on("connection", (socket) => {
 
   socket.on("send message", (message) => {
     socket.in(message.to).emit("new message", message);
+  });
+
+  socket.on("add friend", (request) => {
+    socket
+      .in(request.friendRequestUsername)
+      .emit("new friend request", request.username);
+  });
+
+  socket.on("friend request rejected", (request) => {
+    socket
+      .in(request.friendRequestUsername)
+      .emit("friend request rejected", request.username);
+  });
+
+  socket.on("friend request accepted", (request) => {
+    socket.in(request.friendRequestUsername).emit("friend request accepted", {
+      username: request.username,
+      firstName: request.firstName,
+      lastName: request.lastName,
+    });
   });
 });

@@ -12,6 +12,7 @@ export function FriendList(props) {
       style={{
         backgroundColor: "rgb(66 69 98)",
         borderTop: "1px solid #191919",
+        overflowY: "scroll",
       }}
     >
       {friendList.map((friend) => {

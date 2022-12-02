@@ -2,32 +2,26 @@ import { SearchUser } from "../SearchUser";
 import { FriendRequests } from "./FriendRequests";
 import { FriendList } from "./FriendList";
 import { useEffect } from "react";
-import { Routes, postToNodeServer } from "../../../utils";
-import { useDispatch, useSelector } from "react-redux";
-import { setFriendData, updateLastMessage } from "../../../state/slices";
+import { getFriendData } from "../../../utils";
+import { useDispatch } from "react-redux";
+import {
+  addToFriendList,
+  addToFriendRequestsRecieved,
+  removeFromFriendRequestsSent,
+  updateLastMessage,
+} from "../../../state/slices";
 
 export function FriendSection(props) {
   const dispatch = useDispatch();
-  const username = useSelector((state) => state.userData.username);
   const socket = props.socket;
 
   useEffect(() => {
-    console.log("Friend section useeffect.");
-    const getFriendData = async () => {
-      try {
-        const response = await postToNodeServer(Routes.FRIEND_DATA_ROUTE, {});
-        dispatch(setFriendData(response));
-        console.log("Friend Data updated");
-      } catch (error) {
-        console.error("Error while fetching friendData", error.message);
-      }
-    };
-    getFriendData();
-  }, [dispatch, username, socket]);
+    getFriendData(dispatch);
+  }, [dispatch]);
 
   useEffect(() => {
-    //update last message in friendlist.
     if (socket) {
+      //update last message in friendlist.
       socket.on("new message", (message) => {
         dispatch(
           updateLastMessage({
@@ -37,16 +31,34 @@ export function FriendSection(props) {
           })
         );
       });
+
+      //new friend request
+      socket.on("new friend request", (username) => {
+        dispatch(addToFriendRequestsRecieved(username));
+      });
+
+      //friend request rejected
+      socket.on("friend request rejected", (username) => {
+        dispatch(removeFromFriendRequestsSent(username));
+      });
+
+      //friend request accepted
+      socket.on("friend request accepted", (friend) => {
+        dispatch(removeFromFriendRequestsSent(friend.username));
+        dispatch(
+          addToFriendList({ ...friend, lastMessage: "", lastMessageTime: 0 })
+        );
+      });
     }
   }, [dispatch, socket]);
 
   return (
     <div
       className="container-fluid h-100 p-0 d-flex flex-column"
-      style={{ backgroundColor: "#51557E", overflowY: "scroll" }}
+      style={{ backgroundColor: "#51557E", overflowY: "hidden" }}
     >
-      <FriendRequests />
-      <SearchUser />
+      <FriendRequests {...props} />
+      <SearchUser {...props} />
       <FriendList />
     </div>
   );

@@ -2,7 +2,7 @@ import "../../Css/SearchUser.css";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postToNodeServer, Routes } from "../../utils";
-import { addToFriendRequestSent, setActiveChat } from "../../state/slices";
+import { addToFriendRequestsSent, setActiveChat } from "../../state/slices";
 
 export function SearchUser(props) {
   const [searchResult, setSearchResult] = useState([]);
@@ -17,6 +17,11 @@ export function SearchUser(props) {
   const friendRequestSent = new Set(
     useSelector((state) => state.friendData.friendRequestsSent)
   );
+  const friendRequestRecieved = new Set(
+    useSelector((state) => state.friendData.friendRequestsRecieved)
+  );
+
+  const socket = props.socket;
 
   const onSearch = async (event) => {
     const searchedUser = event.target.value;
@@ -41,7 +46,13 @@ export function SearchUser(props) {
       btn.classList.remove("fa-user");
       btn.classList.add("fa-check");
       btn.classList.add("text-success");
-      dispatch(addToFriendRequestSent(friendRequestUsername));
+      dispatch(addToFriendRequestsSent(friendRequestUsername));
+      if (socket) {
+        socket.emit("add friend", {
+          username: username,
+          friendRequestUsername: friendRequestUsername,
+        });
+      }
     }
   };
 
@@ -82,7 +93,8 @@ export function SearchUser(props) {
                   {user.firstName} {user.lastName}
                 </p>
               </div>
-              {friendRequestSent.has(user.username) === true ? (
+              {friendRequestSent.has(user.username) ||
+              friendRequestRecieved.has(user.username) ? (
                 <i className="fa-solid fa-check text-success ms-auto fs-5" />
               ) : friendUsernameList.has(user.username) === true ? (
                 <i

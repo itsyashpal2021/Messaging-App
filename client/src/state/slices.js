@@ -27,13 +27,39 @@ export const friendDataSlice = createSlice({
       state.friendRequestsSent = action.payload.friendRequestsSent;
       state.friendRequestsRecieved = action.payload.friendRequestsRecieved;
     },
+
     setFriendList: (state, action) => {
       state.friendList = action.payload;
     },
-    addToFriendRequestSent: (state, action) => {
+
+    addToFriendRequestsRecieved: (state, action) => {
+      const newList = state.friendRequestsRecieved;
+      state.friendRequestsRecieved = [...newList, action.payload];
+    },
+
+    removeFromFriendRequestsRecieved: (state, action) => {
+      let newList = state.friendRequestsRecieved;
+      newList = newList.filter((username) => username !== action.payload);
+      state.friendRequestsRecieved = newList;
+    },
+
+    addToFriendRequestsSent: (state, action) => {
       const newList = state.friendRequestsSent;
       state.friendRequestsSent = [...newList, action.payload];
     },
+
+    removeFromFriendRequestsSent: (state, action) => {
+      let newList = state.friendRequestsSent;
+      newList = newList.filter((username) => username !== action.payload);
+      state.friendRequestsSent = newList;
+    },
+
+    addToFriendList: (state, action) => {
+      let newFriendList = state.friendList;
+      newFriendList = [action.payload, ...newFriendList];
+      state.friendList = newFriendList;
+    },
+
     updateLastMessage: (state, action) => {
       const newFriendList = JSON.parse(JSON.stringify(state.friendList));
       const ind = newFriendList.findIndex(
@@ -78,7 +104,11 @@ export const { setUser } = userSlice.actions;
 export const {
   setFriendData,
   setFriendList,
-  addToFriendRequestSent,
+  addToFriendRequestsRecieved,
+  removeFromFriendRequestsRecieved,
+  addToFriendRequestsSent,
+  removeFromFriendRequestsSent,
+  addToFriendList,
   updateLastMessage,
 } = friendDataSlice.actions;
 
