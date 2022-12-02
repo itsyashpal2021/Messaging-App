@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../../Css/UserProfile.css";
@@ -53,6 +52,3 @@ export function UserProfile(props) {
     </div>
   );
 }
-UserProfile.propTypes = {
-  userData: PropTypes.object,
-};

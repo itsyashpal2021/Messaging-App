@@ -1,8 +1,8 @@
 import "../../Css/SearchUser.css";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  postToNodeServer, Routes } from "../../utils";
-import { setActiveChat } from "../../state/slices";
+import { postToNodeServer, Routes } from "../../utils";
+import { addToFriendRequestSent, setActiveChat } from "../../state/slices";
 
 export function SearchUser(props) {
   const [searchResult, setSearchResult] = useState([]);
@@ -41,7 +41,7 @@ export function SearchUser(props) {
       btn.classList.remove("fa-user");
       btn.classList.add("fa-check");
       btn.classList.add("text-success");
-      // getFriendData(dispatch);
+      dispatch(addToFriendRequestSent(friendRequestUsername));
     }
   };
 

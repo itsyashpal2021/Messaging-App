@@ -25,7 +25,7 @@ export function Chat(props) {
       ) : (
         <div className="d-flex h-100 flex-column container-fluid p-0">
           <FriendDetails />
-          <MessageBox />
+          <MessageBox {...props} />
         </div>
       )}
     </div>

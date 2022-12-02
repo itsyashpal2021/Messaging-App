@@ -13,6 +13,6 @@ Tech stack : react (frontend) + nodeJs
 
 TODO:
 
-better fetching of friend data rather than interval posts --> state updates
+friend requests updation using socket.io
 separate profile picture component (images upload in drive/aws and save url in mongo)
 check all comps rendering ...

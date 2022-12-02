@@ -30,6 +30,10 @@ export const friendDataSlice = createSlice({
     setFriendList: (state, action) => {
       state.friendList = action.payload;
     },
+    addToFriendRequestSent: (state, action) => {
+      const newList = state.friendRequestsSent;
+      state.friendRequestsSent = [...newList, action.payload];
+    },
     updateLastMessage: (state, action) => {
       const newFriendList = JSON.parse(JSON.stringify(state.friendList));
       const ind = newFriendList.findIndex(
@@ -43,6 +47,12 @@ export const friendDataSlice = createSlice({
 
       newFriendList[ind].lastMessage = action.payload.lastMessage;
       newFriendList[ind].lastMessageTime = action.payload.lastMessageTime;
+
+      newFriendList.sort(function (a, b) {
+        if (a.lastMessageTime < b.lastMessageTime) return 1;
+        else if (a.lastMessageTime > b.lastMessageTime) return -1;
+        return 0;
+      });
 
       state.friendList = newFriendList;
     },
@@ -64,8 +74,14 @@ export const activeChatSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const { setUser } = userSlice.actions;
-export const { setFriendData, setFriendList, updateLastMessage } =
-  friendDataSlice.actions;
+
+export const {
+  setFriendData,
+  setFriendList,
+  addToFriendRequestSent,
+  updateLastMessage,
+} = friendDataSlice.actions;
+
 export const { setActiveChat } = activeChatSlice.actions;
 
 export default combineReducers({

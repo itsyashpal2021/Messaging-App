@@ -2,20 +2,16 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes } from "../../../utils";
 import { postToNodeServer } from "../../../utils";
-import { io } from "socket.io-client";
 import { ChatBox } from "./ChatBox";
-
-// const ENDPOINT = "http://localhost:8080";
-var socket;
 
 export function MessageBox(props) {
   const username = useSelector((state) => state.userData.username);
   const friendUserName = useSelector((state) => state.activeChat.username);
   const dispatch = useDispatch();
+  const socket = props.socket;
 
   let lastDate = "";
   const [messages, setMessages] = useState([]);
-  const [socketConnected, setSocketConnected] = useState(false);
 
   //this effect will be applied only if the friendname and username change
   useEffect(() => {
@@ -27,20 +23,11 @@ export function MessageBox(props) {
       if (response.status === 200) setMessages([...response.messages]);
     };
     getMessages();
-
-    if (!socketConnected) {
-      socket = io();
-      socket.emit("setup", username);
-      socket.on("connected", () => {
-        console.log("messagebox connected to socket");
-        setSocketConnected(true);
-      });
-    }
-  }, [username, friendUserName, socketConnected]);
+  }, [username, friendUserName]);
 
   //this effect will be applied on every time messages change
   useEffect(() => {
-    if (socketConnected) {
+    if (socket) {
       socket.once("new message", (message) => {
         if (message.from === friendUserName)
           setMessages([...messages, message]);
@@ -50,10 +37,10 @@ export function MessageBox(props) {
     //scroll to bottom
     const messageBox = document.getElementById("messageBox");
     messageBox.scrollTop = messageBox.scrollHeight;
-  }, [messages, socketConnected, friendUserName, dispatch]);
+  }, [messages, friendUserName, socket, dispatch]);
 
   const emitMessage = (message) => {
-    if (socketConnected) {
+    if (socket) {
       socket.emit("send message", message);
     }
     setMessages([...messages, message]);
