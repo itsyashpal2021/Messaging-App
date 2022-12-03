@@ -8,6 +8,7 @@ import { Chat } from "./ChatSection/Chat";
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 import { useState } from "react";
+
 export function UserDashboard(props) {
   const username = useSelector((state) => state.userData.username);
   const [socket, setSocket] = useState();
@@ -15,6 +16,7 @@ export function UserDashboard(props) {
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
+  if (username) document.title = `${username} | Messaging App`;
   //update user data
   useEffect(() => {
     getUserData(dispatch, navigate);

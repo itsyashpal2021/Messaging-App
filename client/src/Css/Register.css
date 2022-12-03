@@ -1,0 +1,13 @@
+form {
+  background-color: #112131;
+  overflow-y: scroll;
+}
+form label {
+  margin: 0;
+  font-weight: 600;
+  color: #a49e9e;
+}
+form input {
+  border: none;
+  background-color: #d6cdcd;
+}

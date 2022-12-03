@@ -1,0 +1,31 @@
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #0d161f;
+  overflow-y: scroll;
+}
+
+#formDiv {
+  background-color: #112131;
+  color: #a49e9e;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+#formDiv label {
+  margin: 0;
+  font-weight: 600;
+}
+#formDiv input {
+  border: none;
+  background-color: #d6cdcd;
+}
+
+#formDiv {
+  border-radius: 10px;
+}
+
+#formDiv a:hover {
+  font-weight: 500;
+}

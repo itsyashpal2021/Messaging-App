@@ -5,12 +5,14 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setActiveChat } from "../state/slices";
 import { getFormValues, postToNodeServer, Routes } from "../utils.js";
+import "../Css/Login.css";
 
 export function LoginForm(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [labelVisible, setLabelVisible] = useState(false);
   const [sessionActive, setSessionActive] = useState(true);
+  document.title = "Login";
 
   useEffect(() => {
     async function checkSession() {
@@ -42,67 +44,58 @@ export function LoginForm(props) {
   return sessionActive ? (
     <></>
   ) : (
-    <div className="container-xl">
-      <form onSubmit={onSubmit}>
-        <div className="container-fluid py-5">
-          <div className="row justify-content-center">
-            <div className="col-md-5 col-10 my-2">
-              <label
-                htmlFor="userNameInput"
-                className="form-label fs-5 d-block"
-              >
-                Username
-              </label>
-              <input
-                type="text"
-                className="form-control-lg w-100"
-                id="userNameInput"
-                name="username"
-                required
-              />
-            </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="col-md-5 col-10 my-2">
-              <label
-                htmlFor="passwordInput"
-                className="form-label fs-5 d-block"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                className="form-control-lg w-100"
-                id="passwordInput"
-                name="password"
-                required
-              />
-            </div>
-            <div className="row justify-content-center mt-2">
-              <div className="col-md-5 col-10 px-1">
-                <label
-                  className="col-10 fs-6"
-                  style={{
-                    display: labelVisible === false ? "none" : "block",
-                    color: "red",
-                  }}
-                >
-                  Invalid Login
-                </label>
-                <button
-                  type="submit"
-                  className="btn btn-primary d-block w-100 fs-5 my-2"
-                >
-                  Login
-                </button>
-                <Link to="/register" className="fs-6">
-                  Register New User
-                </Link>
-              </div>
-            </div>
-          </div>
+    <form onSubmit={onSubmit} className="container-fluid h-100 p-3">
+      <div className="row container-fluid p-0 justify-content-center">
+        <div
+          className="col-md-8 col-lg-5 col-xxl-4 col-sm-10 col-11 p-3"
+          id="formDiv"
+        >
+          <label htmlFor="userNameInput" className="form-label fs-5 d-block">
+            Username
+          </label>
+          <input
+            type="text"
+            className="form-control-lg w-100"
+            id="userNameInput"
+            name="username"
+            required
+          />
+          <label
+            htmlFor="passwordInput"
+            className="form-label fs-5 d-block mt-2"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            className="form-control-lg w-100"
+            id="passwordInput"
+            name="password"
+            required
+          />
+          <label
+            className="col-10 fs-6"
+            style={{
+              display: labelVisible === false ? "none" : "block",
+              color: "red",
+            }}
+          >
+            Invalid Login
+          </label>
+          <button
+            type="submit"
+            className="btn btn-primary d-block w-100 fs-5 mt-3"
+          >
+            Login
+          </button>
+          <Link
+            to="/register"
+            className="fs-6 mt-2 d-block text-info text-decoration-none"
+          >
+            Register New User
+          </Link>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }
