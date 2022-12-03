@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { setActiveChat } from "../../../state/slices";
 import { Routes } from "../../../utils";
 import { postToNodeServer } from "../../../utils";
 import { ChatBox } from "./ChatBox";
@@ -12,6 +13,10 @@ export function MessageBox(props) {
 
   let lastDate = "";
   const [messages, setMessages] = useState([]);
+
+  window.addEventListener("popstate", function (event) {
+    dispatch(setActiveChat({}));
+  });
 
   //this effect will be applied only if the friendname and username change
   useEffect(() => {

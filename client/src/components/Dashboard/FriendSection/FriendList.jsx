@@ -46,6 +46,7 @@ export function FriendList(props) {
                   : "inherit";
             }}
             onClick={() => {
+              window.history.pushState({}, "");
               dispatch(setActiveChat(friend));
             }}
           >

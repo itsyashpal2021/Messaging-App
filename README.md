@@ -14,7 +14,7 @@ Tech stack : react (frontend) + nodeJs
 TODO:
 
 notification tab for rejected/accepted frs
-chat, page background(animated?)...
-chat back button gestures.(using browser back button event)
 separate profile picture component (images upload in drive/aws and save url in mongo)
 check all comps rendering ...
+unfriend, clear chat
+group chat

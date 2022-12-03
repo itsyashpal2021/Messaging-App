@@ -63,6 +63,7 @@ export function SearchUser(props) {
         className="form-control-lg w-100"
         placeholder="Search an user"
         onChange={onSearch}
+        style={{ border: "none" }}
       />
 
       <div>
