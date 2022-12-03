@@ -94,6 +94,11 @@ export const activeChatSlice = createSlice({
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
+      state.messages =
+        action.payload.messages === undefined ? [] : action.payload.messages;
+    },
+    setMessages: (state, action) => {
+      state.messages = [...action.payload];
     },
   },
 });
@@ -112,7 +117,7 @@ export const {
   updateLastMessage,
 } = friendDataSlice.actions;
 
-export const { setActiveChat } = activeChatSlice.actions;
+export const { setActiveChat, setMessages } = activeChatSlice.actions;
 
 export default combineReducers({
   userData: userSlice.reducer,

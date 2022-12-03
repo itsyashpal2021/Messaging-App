@@ -2,15 +2,17 @@ import { useSelector } from "react-redux";
 import { ChatAnimation } from "./ChatAnimation";
 import { FriendDetails } from "./FriendDetails";
 import { MessageBox } from "./MessageBox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function Chat(props) {
   const activeChat = useSelector((state) => state.activeChat);
   const [isSmallWindow, setIsSmallWindow] = useState(window.innerWidth <= 767);
 
-  window.addEventListener("resize", () => {
-    setIsSmallWindow(window.innerWidth <= 767);
-  });
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      setIsSmallWindow(window.innerWidth <= 767);
+    });
+  }, []);
 
   return (
     <div

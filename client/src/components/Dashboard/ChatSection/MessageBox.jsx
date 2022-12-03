@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveChat } from "../../../state/slices";
+import { setActiveChat, setMessages } from "../../../state/slices";
 import { Routes } from "../../../utils";
 import { postToNodeServer } from "../../../utils";
 import { ChatBox } from "./ChatBox";
@@ -8,15 +8,12 @@ import { ChatBox } from "./ChatBox";
 export function MessageBox(props) {
   const username = useSelector((state) => state.userData.username);
   const friendUserName = useSelector((state) => state.activeChat.username);
-  const dispatch = useDispatch();
+  const messages = useSelector((state) => state.activeChat.messages);
+
   const socket = props.socket;
+  const dispatch = useDispatch();
 
   let lastDate = "";
-  const [messages, setMessages] = useState([]);
-
-  window.addEventListener("popstate", function (event) {
-    dispatch(setActiveChat({}));
-  });
 
   //this effect will be applied only if the friendname and username change
   useEffect(() => {
@@ -25,17 +22,28 @@ export function MessageBox(props) {
         username: username,
         friendUserName: friendUserName,
       });
-      if (response.status === 200) setMessages([...response.messages]);
+
+      if (response.status === 200) {
+        dispatch(setMessages(response.messages));
+      }
     };
     getMessages();
-  }, [username, friendUserName]);
+
+    window.addEventListener(
+      "popstate",
+      function (event) {
+        dispatch(setActiveChat({}));
+      },
+      { once: true }
+    );
+  }, [username, friendUserName, dispatch]);
 
   //this effect will be applied on every time messages change
   useEffect(() => {
     if (socket) {
       socket.once("new message", (message) => {
         if (message.from === friendUserName)
-          setMessages([...messages, message]);
+          dispatch(setMessages([...messages, message]));
       });
     }
 
@@ -48,7 +56,7 @@ export function MessageBox(props) {
     if (socket) {
       socket.emit("send message", message);
     }
-    setMessages([...messages, message]);
+    dispatch(setMessages([...messages, message]));
   };
 
   return (
