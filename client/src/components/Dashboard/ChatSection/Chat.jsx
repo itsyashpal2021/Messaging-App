@@ -2,7 +2,9 @@ import { useSelector } from "react-redux";
 import { ChatAnimation } from "./ChatAnimation";
 import { FriendDetails } from "./FriendDetails";
 import { MessageBox } from "./MessageBox";
+import { ChatBox } from "./ChatBox";
 import { useEffect, useState } from "react";
+
 
 export function Chat(props) {
   const activeChat = useSelector((state) => state.activeChat);
@@ -33,6 +35,7 @@ export function Chat(props) {
         <div className="d-flex h-100 flex-column container-fluid p-0">
           <FriendDetails />
           <MessageBox {...props} />
+          <ChatBox {...props} />
         </div>
       )}
     </div>

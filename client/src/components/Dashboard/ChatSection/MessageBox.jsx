@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setActiveChat, setMessages } from "../../../state/slices";
 import { Routes } from "../../../utils";
 import { postToNodeServer } from "../../../utils";
-import { ChatBox } from "./ChatBox";
 
 export function MessageBox(props) {
   const username = useSelector((state) => state.userData.username);
@@ -51,13 +50,6 @@ export function MessageBox(props) {
     const messageBox = document.getElementById("messageBox");
     messageBox.scrollTop = messageBox.scrollHeight;
   }, [messages, friendUserName, socket, dispatch]);
-
-  const emitMessage = (message) => {
-    if (socket) {
-      socket.emit("send message", message);
-    }
-    dispatch(setMessages([...messages, message]));
-  };
 
   return (
     <div className="container-fluid p-0 d-flex flex-column h-100 overflow-hidden">
@@ -131,7 +123,6 @@ export function MessageBox(props) {
           );
         })}
       </div>
-      <ChatBox emitMessage={emitMessage} />
     </div>
   );
 }

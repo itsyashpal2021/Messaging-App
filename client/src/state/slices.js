@@ -100,6 +100,9 @@ export const activeChatSlice = createSlice({
     setMessages: (state, action) => {
       state.messages = [...action.payload];
     },
+    addToMessages: (state, action) => {
+      state.messages.push(action.payload);
+    },
   },
 });
 
@@ -117,7 +120,8 @@ export const {
   updateLastMessage,
 } = friendDataSlice.actions;
 
-export const { setActiveChat, setMessages } = activeChatSlice.actions;
+export const { setActiveChat, setMessages, addToMessages } =
+  activeChatSlice.actions;
 
 export default combineReducers({
   userData: userSlice.reducer,
