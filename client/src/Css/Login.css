@@ -20,6 +20,11 @@ form {
 #formDiv input {
   border: none;
   background-color: #d6cdcd;
+  font-weight: bold;
+}
+
+#formDiv input:focus-visible {
+  outline: none;
 }
 
 #formDiv {

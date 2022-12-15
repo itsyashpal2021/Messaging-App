@@ -53,9 +53,9 @@ export function RegisterForm(props) {
     <></>
   ) : (
     <form onSubmit={onSubmit} className="container-fluid h-100 p-0">
-      <div className="container-fluid py-5">
+      <div className="container-fluid">
         <div className="row justify-content-center">
-          <div className="col-md-5 col-10 my-2">
+          <div className="col-md-5 col-10">
             <label htmlFor="userNameInput" className="form-label fs-5 d-block">
               Username
             </label>

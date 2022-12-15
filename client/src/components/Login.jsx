@@ -44,10 +44,10 @@ export function LoginForm(props) {
   return sessionActive ? (
     <></>
   ) : (
-    <form onSubmit={onSubmit} className="container-fluid h-100 p-3">
+    <form onSubmit={onSubmit} className="container-fluid h-100 p-0">
       <div className="row container-fluid p-0 justify-content-center">
         <div
-          className="col-md-8 col-lg-5 col-xxl-4 col-sm-10 col-11 p-3"
+          className="col-md-8 col-lg-5 col-xxl-4 col-sm-10 col-11 p-4"
           id="formDiv"
         >
           <label htmlFor="userNameInput" className="form-label fs-5 d-block">

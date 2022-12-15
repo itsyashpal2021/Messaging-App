@@ -1,10 +1,10 @@
 /* width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(139, 139, 162);
+  background-color: rgb(102 102 105);
   border-radius: 20px;
 }
