@@ -3,6 +3,7 @@ import { Routes, postToNodeServer } from "../../../utils";
 import EmojiPicker from "emoji-picker-react";
 import { useState } from "react";
 import { addToMessages, updateLastMessage } from "../../../state/slices";
+import { useEffect } from "react";
 
 export function ChatBox(props) {
   const [showEmojis, setShowEmojis] = useState(false);
@@ -12,6 +13,10 @@ export function ChatBox(props) {
   const friendUserName = useSelector((state) => state.activeChat.username);
 
   const socket = props.socket;
+
+  useEffect(() => {
+    document.getElementById("chatbox").focus();
+  }, [friendUserName]);
 
   const sendMessage = async () => {
     const chatbox = document.getElementById("chatbox");
@@ -66,6 +71,9 @@ export function ChatBox(props) {
             id="chatbox"
             placeholder="Enter a message"
             autoComplete="off"
+            onFocus={(event) => {
+              event.target.style.outline = "none";
+            }}
             onKeyDown={(event) => {
               if (event.key === "Enter") sendMessage();
             }}

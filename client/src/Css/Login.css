@@ -16,6 +16,7 @@ form {
 #formDiv label {
   margin: 0;
   font-weight: 600;
+  user-select: none;
 }
 #formDiv input {
   border: none;
@@ -29,6 +30,14 @@ form {
 
 #formDiv {
   border-radius: 10px;
+}
+
+#showPasswordInput {
+  border-radius: 15px;
+}
+
+#showPasswordInput:checked {
+  accent-color: #6901ff;
 }
 
 #formDiv a:hover {

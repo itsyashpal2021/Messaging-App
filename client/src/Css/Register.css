@@ -17,3 +17,14 @@ form input {
 form input:focus-visible {
   outline: none;
 }
+
+form input:checked[type="radio"] {
+  background-color: #0043ff;
+  background-image: none !important;
+  border: none;
+}
+
+form input:focus[type="radio"] {
+  border: none;
+  box-shadow: none;
+}

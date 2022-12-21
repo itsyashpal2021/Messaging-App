@@ -82,15 +82,29 @@ export function LoginForm(props) {
           >
             Invalid Login
           </label>
-          <button
-            type="submit"
-            className="btn btn-primary d-block w-100 fs-5 mt-3"
-          >
+          <div className="mt-3 mb-2">
+            <input
+              type="checkbox"
+              id="showPasswordInput"
+              onChange={() => {
+                const passwordInput = document.getElementById("passwordInput");
+                if (passwordInput.type === "text") {
+                  passwordInput.type = "password";
+                } else {
+                  passwordInput.type = "text";
+                }
+              }}
+            />
+            <label htmlFor="showPasswordInput" className="ms-1">
+              Show Password
+            </label>
+          </div>
+          <button type="submit" className="btn btn-primary d-block w-100 fs-5">
             Login
           </button>
           <Link
             to="/register"
-            className="fs-6 mt-2 d-block text-info text-decoration-none"
+            className="fs-6 mt-2 d-block text-info text-decoration-none user-select-none"
           >
             Register New User
           </Link>
