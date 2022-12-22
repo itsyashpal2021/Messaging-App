@@ -1,9 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "../../Css/UserProfile.css";
 import { setActiveChat, setFriendData } from "../../state/slices";
 import { setUser } from "../../state/slices";
 import { postToNodeServer, Routes } from "../../utils";
+import ProfilePic from "./ProfilePic";
 
 export function UserProfile(props) {
   let navigate = useNavigate();
@@ -28,13 +28,11 @@ export function UserProfile(props) {
 
   return (
     <div
-      className="container-fluid d-flex  flex-lg-row flex-column justify-content-between p-2"
+      className="container-fluid d-flex justify-content-between p-2"
       style={{ backgroundColor: "#1B2430", color: "white" }}
     >
       <div className="d-flex flex-wrap justify-content-center align-items-center">
-        <div className="profile-picture me-2">
-          <i className="fa-solid fa-user" />
-        </div>
+        <ProfilePic size="large" className="me-2" />
         <div>
           <p className="m-0 fs-1 text-center">{userData.username}</p>
           <p className="m-0 h5 text-center">
@@ -43,12 +41,17 @@ export function UserProfile(props) {
           <p className="m-0 text-primary text-center">{userData.email}</p>
         </div>
       </div>
-      <button
+      <i
+        class="fa-solid fa-right-from-bracket fs-4 text-danger align-self-center"
+        onClick={onLogout}
+        style={{ cursor: "pointer" }}
+      />
+      {/* <button
         className="btn btn-secondary align-self-center mt-2 mt-lg-0"
         onClick={onLogout}
       >
         Log Out
-      </button>
+      </button> */}
     </div>
   );
 }

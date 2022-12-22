@@ -5,7 +5,6 @@ import { MessageBox } from "./MessageBox";
 import { ChatBox } from "./ChatBox";
 import { useEffect, useState } from "react";
 
-
 export function Chat(props) {
   const activeChat = useSelector((state) => state.activeChat);
   const [isSmallWindow, setIsSmallWindow] = useState(window.innerWidth <= 767);
@@ -35,7 +34,7 @@ export function Chat(props) {
         <div className="d-flex h-100 flex-column container-fluid p-0">
           <FriendDetails />
           <MessageBox {...props} />
-          <ChatBox {...props} />
+          <ChatBox {...props} isSmallWindow={isSmallWindow} />
         </div>
       )}
     </div>

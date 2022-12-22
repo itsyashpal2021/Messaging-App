@@ -15,8 +15,8 @@ export function ChatBox(props) {
   const socket = props.socket;
 
   useEffect(() => {
-    document.getElementById("chatbox").focus();
-  }, [friendUserName]);
+    if (!props.isSmallWindow) document.getElementById("chatbox").focus();
+  }, [props]);
 
   const sendMessage = async () => {
     const chatbox = document.getElementById("chatbox");

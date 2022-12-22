@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveChat } from "../../../state/slices";
+import ProfilePic from "../ProfilePic";
 
 export function FriendList(props) {
   const friendList = useSelector((state) => state.friendData.friendList);
@@ -46,21 +47,22 @@ export function FriendList(props) {
                   : "inherit";
             }}
             onClick={() => {
-              window.history.pushState({}, "");
-              dispatch(setActiveChat(friend));
+              if (activeChat.username !== friend.username) {
+                window.history.pushState({}, "");
+                dispatch(setActiveChat(friend));
+              }
             }}
           >
-            <div
-              className="profile-picture me-2 fs-3"
+            <ProfilePic
+              size="small"
+              color="aqua"
+              borderColor="aqua"
+              className="me-2"
               style={{
-                width: "50px",
-                height: "50px",
-                borderColor: "aqua",
-                color: "aqua",
+                flexGrow: 0,
+                flexShrink: 0,
               }}
-            >
-              <i className="fa-solid fa-user" />
-            </div>
+            />
             <div className="d-flex flex-column w-100  ">
               <span className="fs-3 text-white lh-1">
                 {friend.firstName} {friend.lastName}

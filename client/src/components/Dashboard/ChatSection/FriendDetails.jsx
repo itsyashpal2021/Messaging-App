@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveChat } from "../../../state/slices";
+import ProfilePic from "../ProfilePic";
 
 export function FriendDetails(props) {
   const friend = useSelector((state) => state.activeChat);
@@ -32,12 +33,7 @@ export function FriendDetails(props) {
         style={{ display: window.innerWidth <= 767 ? "inline" : "none" }}
         onClick={() => dispatch(setActiveChat({}))}
       />
-      <div
-        className="profile-picture me-2"
-        style={{ width: "45px", height: "45px" }}
-      >
-        <i className="fas fa-user fs-3" />
-      </div>
+      <ProfilePic size="small" className="me-2" />
       <div>
         <p className="fs-2 m-0 lh-1">
           {friend.firstName} {friend.lastName}
