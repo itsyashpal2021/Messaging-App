@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  profilePicId: String,
 });
 
 //passportLocalMongoose

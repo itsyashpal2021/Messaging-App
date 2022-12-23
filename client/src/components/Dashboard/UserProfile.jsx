@@ -1,12 +1,17 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setActiveChat, setFriendData } from "../../state/slices";
+import {
+  setActiveChat,
+  setFriendData,
+  setProfilePic,
+} from "../../state/slices";
 import { setUser } from "../../state/slices";
 import { postToNodeServer, Routes } from "../../utils";
 import ProfilePic from "./ProfilePic";
 
 export function UserProfile(props) {
   let navigate = useNavigate();
+
   const userData = useSelector((state) => state.userData);
   const dispatch = useDispatch();
 
@@ -32,7 +37,64 @@ export function UserProfile(props) {
       style={{ backgroundColor: "#1B2430", color: "white" }}
     >
       <div className="d-flex flex-wrap justify-content-center align-items-center">
-        <ProfilePic size="large" className="me-2" />
+        <div
+          className="me-2 position-relative"
+          onMouseOver={() => {
+            document.getElementById("profilePic").style.visibility = "hidden";
+            document.getElementById("editProfilePicDiv").style.visibility =
+              "visible";
+          }}
+          onMouseOut={() => {
+            document.getElementById("profilePic").style.visibility = "visible";
+            document.getElementById("editProfilePicDiv").style.visibility =
+              "hidden";
+          }}
+        >
+          <ProfilePic size="large" id="profilePic" src={userData.profilePic} />
+          <input
+            type="file"
+            id="profilePicInput"
+            className="visually-hidden"
+            accept="image/*"
+            onChange={async (event) => {
+              const imgFile = event.target.files[0];
+              const formData = new FormData();
+              formData.append("profilePic", imgFile);
+
+              const res = await fetch(Routes.UPLOAD_PROFILE_PIC, {
+                method: "POST",
+                body: formData,
+              });
+
+              if (res.status == 200) {
+                const responseJson = await res.json();
+                const src = responseJson.src;
+                dispatch(setProfilePic(src));
+              } else {
+                console.error("Can not update profile picture:", res);
+              }
+            }}
+          />
+          <div
+            id="editProfilePicDiv"
+            className="h-100 w-100 d-flex justify-content-center align-items-center"
+            style={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              border: "1px solid grey",
+              borderRadius: "50%",
+              backgroundColor: "rgb(0,0,0,0.6)",
+              zIndex: 2,
+              visibility: "hidden",
+            }}
+            onClick={() => {
+              document.getElementById("profilePicInput").click();
+            }}
+          >
+            <i className="fa-solid fa-pen text-warning fs-3" />
+          </div>
+        </div>
         <div>
           <p className="m-0 fs-1 text-center">{userData.username}</p>
           <p className="m-0 h5 text-center">
@@ -42,16 +104,10 @@ export function UserProfile(props) {
         </div>
       </div>
       <i
-        class="fa-solid fa-right-from-bracket fs-4 text-danger align-self-center"
+        className="fa-solid fa-right-from-bracket fs-4 text-danger align-self-center"
         onClick={onLogout}
         style={{ cursor: "pointer" }}
       />
-      {/* <button
-        className="btn btn-secondary align-self-center mt-2 mt-lg-0"
-        onClick={onLogout}
-      >
-        Log Out
-      </button> */}
     </div>
   );
 }

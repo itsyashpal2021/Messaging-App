@@ -32,9 +32,14 @@ export default function ProfilePic(props) {
         color: color,
         ...styles,
       }}
+      id={props.id ? props.id : null}
     >
       {props.src ? (
-        <div>profile pic</div>
+        <img
+          src={props.src}
+          alt="Loading..."
+          className="h-100 w-100 rounded-circle"
+        />
       ) : (
         <i className={`fa-solid fa-user ${fontClass}`} />
       )}

@@ -10,6 +10,10 @@ export const userSlice = createSlice({
       state.firstName = user.firstName;
       state.lastName = user.lastName;
       state.email = user.email;
+      state.profilePic = user.profilePic;
+    },
+    setProfilePic: (state, action) => {
+      state.profilePic = action.payload;
     },
   },
 });
@@ -94,8 +98,8 @@ export const activeChatSlice = createSlice({
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
-      state.messages =
-        action.payload.messages === undefined ? [] : action.payload.messages;
+      state.messages = action.payload.messages ? action.payload.messages : [];
+      state.profilePic = action.payload.profilePic;
     },
     setMessages: (state, action) => {
       state.messages = [...action.payload];
@@ -107,7 +111,7 @@ export const activeChatSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser } = userSlice.actions;
+export const { setUser, setProfilePic } = userSlice.actions;
 
 export const {
   setFriendData,

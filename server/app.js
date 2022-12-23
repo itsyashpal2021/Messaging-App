@@ -15,8 +15,10 @@ const {
   checkSession,
   getFriendData,
   getMessages,
+  uploadProfilePic,
 } = require("./posts/posts.js");
 const { request } = require("express");
+const multer = require("multer")();
 require("dotenv").config();
 
 const app = express();
@@ -58,6 +60,7 @@ app.post("/acceptFriendRequest", acceptFriendRequest);
 app.post("/rejectFriendRequest", rejectFriendRequest);
 app.post("/getMessages", getMessages);
 app.post("/sendMessage", sendMessage);
+app.post("/uploadProfilePic", multer.single("profilePic"), uploadProfilePic);
 
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}.`);

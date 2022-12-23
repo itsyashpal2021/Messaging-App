@@ -13,6 +13,7 @@ export const Routes = {
   REJECT_FRIEND_REQUEST_ROUTE: "/rejectFriendRequest",
   GET_MESSAGES_ROUTE: "/getMessages",
   SEND_MESSAGE_ROUTE: "/sendMessage",
+  UPLOAD_PROFILE_PIC: "/uploadProfilePic",
 };
 
 export const getFormValues = (event) => {

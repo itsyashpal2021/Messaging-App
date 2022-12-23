@@ -62,6 +62,7 @@ export function FriendList(props) {
                 flexGrow: 0,
                 flexShrink: 0,
               }}
+              src={friend.profilePic}
             />
             <div className="d-flex flex-column w-100  ">
               <span className="fs-3 text-white lh-1">
