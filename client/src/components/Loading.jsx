@@ -5,6 +5,9 @@ export function Loading(props) {
   return (
     <div className="loader-container">
       <div className="spinner"></div>
+      <span className="text-white text-bold mt-1">
+        {props.userFetched ? "Loading Friends" : "Loading User"}
+      </span>
     </div>
   );
 }

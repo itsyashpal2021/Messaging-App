@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getUserData } from "../../utils";
+import { getFriendData, getUserData } from "../../utils";
 import { Loading } from "../Loading";
 import { UserProfile } from "./UserProfile";
 import { FriendSection } from "./FriendSection/FriendSection";
@@ -11,6 +11,7 @@ import { useState } from "react";
 
 export function UserDashboard(props) {
   const username = useSelector((state) => state.userData.username);
+  const friendData = useSelector((state) => state.friendData);
   const [socket, setSocket] = useState();
 
   let navigate = useNavigate();
@@ -20,6 +21,7 @@ export function UserDashboard(props) {
   //update user data
   useEffect(() => {
     getUserData(dispatch, navigate);
+    getFriendData(dispatch);
     setSocket(io());
   }, [dispatch, navigate]);
 
@@ -32,8 +34,8 @@ export function UserDashboard(props) {
     }
   }, [socket, username]);
 
-  return username === undefined ? (
-    <Loading />
+  return !(username && friendData.friendList) ? (
+    <Loading userFetched={username !== undefined} />
   ) : (
     <div className="container-fluid row m-0 p-0 h-100">
       <div className="col-12 col-md-5 col-xxl-4 p-0 h-100">

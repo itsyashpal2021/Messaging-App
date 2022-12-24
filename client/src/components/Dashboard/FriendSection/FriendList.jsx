@@ -54,13 +54,13 @@ export function FriendList(props) {
             }}
           >
             <ProfilePic
-              size="small"
-              color="aqua"
-              borderColor="aqua"
-              className="me-2"
+              size="50px"
+              className="me-2 fs-4"
               style={{
                 flexGrow: 0,
                 flexShrink: 0,
+                borderColor: "aqua",
+                color: "aqua",
               }}
               src={friend.profilePic}
             />

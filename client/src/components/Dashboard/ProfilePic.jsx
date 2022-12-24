@@ -1,47 +1,26 @@
 import React from "react";
 export default function ProfilePic(props) {
-  let size, fontClass;
-  switch (props.size) {
-    case "large":
-      size = "65px";
-      fontClass = "fs-1";
-      break;
-
-    case "small":
-      size = "50px";
-      fontClass = "fs-3";
-      break;
-    default:
-      console.error("unexpected value of size.");
-      break;
-  }
-
-  const color = props.color ? props.color : "white";
-  const borderColor = props.borderColor ? props.borderColor : "white";
-  const otherClasses = props.className ? props.className : "";
-  const styles = { ...props.style };
   return (
     <div
-      className={`d-flex justify-content-center align-items-center ${otherClasses}`}
+      className={`d-flex justify-content-center align-items-center rounded-circle ${props.className}`}
       style={{
-        width: size,
-        height: size,
+        width: props.size,
+        height: props.size,
         border: "2px solid",
-        borderRadius: "50%",
-        borderColor: borderColor,
-        color: color,
-        ...styles,
+        ...props.style,
       }}
-      id={props.id ? props.id : null}
+      id={props.id}
+      onClick={props.onClick}
     >
       {props.src ? (
         <img
           src={props.src}
           alt="Loading..."
           className="h-100 w-100 rounded-circle"
+          style={{ objectFit: "cover" }}
         />
       ) : (
-        <i className={`fa-solid fa-user ${fontClass}`} />
+        <i className={`fa-solid fa-user`} />
       )}
     </div>
   );

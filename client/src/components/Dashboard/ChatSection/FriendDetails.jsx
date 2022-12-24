@@ -33,7 +33,11 @@ export function FriendDetails(props) {
         style={{ display: window.innerWidth <= 767 ? "inline" : "none" }}
         onClick={() => dispatch(setActiveChat({}))}
       />
-      <ProfilePic size="small" className="me-2" src={friend.profilePic} />
+      <ProfilePic
+        size="60px"
+        className="ms-1 me-3 fs-4"
+        src={friend.profilePic}
+      />
       <div>
         <p className="fs-2 m-0 lh-1">
           {friend.firstName} {friend.lastName}

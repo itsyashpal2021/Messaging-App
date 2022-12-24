@@ -20,11 +20,7 @@ export const userSlice = createSlice({
 
 export const friendDataSlice = createSlice({
   name: "friendData",
-  initialState: {
-    friendList: [],
-    friendRequestsRecieved: [],
-    friendRequestsSent: [],
-  },
+  initialState: {},
   reducers: {
     setFriendData: (state, action) => {
       state.friendList = action.payload.friendList;
