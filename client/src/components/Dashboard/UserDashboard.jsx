@@ -18,7 +18,7 @@ export function UserDashboard(props) {
   const dispatch = useDispatch();
 
   if (username) document.title = `${username} | Messaging App`;
-  //update user data
+  
   useEffect(() => {
     getUserData(dispatch, navigate);
     getFriendData(dispatch);

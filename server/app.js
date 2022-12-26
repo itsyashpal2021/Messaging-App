@@ -16,6 +16,7 @@ const {
   getFriendData,
   getMessages,
   uploadProfilePic,
+  removeProfilePic,
 } = require("./posts/posts.js");
 const { request } = require("express");
 const multer = require("multer")();
@@ -61,6 +62,7 @@ app.post("/rejectFriendRequest", rejectFriendRequest);
 app.post("/getMessages", getMessages);
 app.post("/sendMessage", sendMessage);
 app.post("/uploadProfilePic", multer.single("profilePic"), uploadProfilePic);
+app.post("/removeProfilePic", removeProfilePic);
 
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}.`);

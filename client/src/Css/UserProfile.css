@@ -7,19 +7,17 @@
   animation-timing-function: linear;
 }
 
-.fa-arrow-left:hover {
-  background-color: rgb(51 73 101 / 36%);
-  border-radius: 6px;
+i {
+  height: fit-content;
 }
 
-.fa-right-from-bracket:hover {
-  background-color: rgb(131, 192, 200, 0.1);
+.fa-solid:not(.fa-user):hover {
+  background-color: rgb(51 73 101 / 30%);
   border-radius: 6px;
 }
 
 #loadingDiv {
   position: absolute;
-  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -54,6 +52,21 @@
 }
 #loadingDiv > div :nth-child(5) {
   animation-delay: 0.8s;
+}
+
+#profilePicOptions {
+  background-color: rgb(51 73 101 / 30%);
+  border-radius: 6px;
+  user-select: none;
+  overflow: hidden;
+  transition: max-height 0.35s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+#profilePicOptions span:hover {
+  background-color: rgb(30 33 57 / 70%);
+  cursor: pointer;
 }
 
 @keyframes slide {

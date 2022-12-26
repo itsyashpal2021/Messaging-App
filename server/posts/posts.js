@@ -4,6 +4,7 @@ const {
   getDriveService,
   uploadToDrive,
   getImageFromDrive,
+  removeFromDrive,
 } = require("../driveService/service.js");
 
 const driveService = getDriveService();
@@ -314,6 +315,19 @@ const uploadProfilePic = async (req, res) => {
   }
 };
 
+const removeProfilePic = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.user.username });
+    const id = user.profilePicId;
+    await removeFromDrive(id, driveService);
+    user.profilePicId = undefined;
+    await user.save();
+    res.status(200).json({ message: "SUCCESS" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   onRegister,
   checkSession,
@@ -328,4 +342,5 @@ module.exports = {
   getMessages,
   sendMessage,
   uploadProfilePic,
+  removeProfilePic,
 };

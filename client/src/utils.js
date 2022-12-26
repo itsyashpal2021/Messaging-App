@@ -14,6 +14,7 @@ export const Routes = {
   GET_MESSAGES_ROUTE: "/getMessages",
   SEND_MESSAGE_ROUTE: "/sendMessage",
   UPLOAD_PROFILE_PIC: "/uploadProfilePic",
+  REMOVE_PROFILE_PIC: "/removeProfilePic",
 };
 
 export const getFormValues = (event) => {

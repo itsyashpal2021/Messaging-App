@@ -19,8 +19,6 @@ const uploadFile = async (fileObject, driveService) => {
   const bufferStream = new stream.PassThrough();
   bufferStream.end(fileObject.buffer);
 
-  console.log("uploading file...");
-
   const { data } = await driveService.files.create({
     media: {
       mimeType: fileObject.mimeType,
@@ -55,8 +53,13 @@ const getImageFromDrive = async (id, driveService) => {
   return dataURI;
 };
 
+const removeFromDrive = async (id, driveService) => {
+  await driveService.files.delete({ fileId: id });
+};
+
 module.exports = {
   getDriveService: getDriveService,
   uploadToDrive: uploadFile,
   getImageFromDrive: getImageFromDrive,
+  removeFromDrive: removeFromDrive,
 };

@@ -2,7 +2,6 @@ import { SearchUser } from "../SearchUser";
 import { FriendRequests } from "./FriendRequests";
 import { FriendList } from "./FriendList";
 import { useEffect } from "react";
-// import { getFriendData } from "../../../utils";
 import { useDispatch } from "react-redux";
 import {
   addToFriendList,
@@ -14,10 +13,6 @@ import {
 export function FriendSection(props) {
   const dispatch = useDispatch();
   const socket = props.socket;
-
-  // useEffect(() => {
-  //   getFriendData(dispatch);
-  // }, [dispatch]);
 
   useEffect(() => {
     if (socket) {

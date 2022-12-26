@@ -15,6 +15,7 @@ export default function ProfilePic(props) {
       {props.src ? (
         <img
           src={props.src}
+          draggable={false}
           alt="Loading..."
           className="h-100 w-100 rounded-circle"
           style={{ objectFit: "cover" }}
