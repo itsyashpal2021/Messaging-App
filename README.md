@@ -14,7 +14,6 @@ Tech stack : react (frontend) + nodeJs
 TODO:
 
 notification tab for rejected/accepted frs
-separate profile picture component (images upload in drive/aws and save url in mongo)
 check all comps rendering ...
 unfriend, clear chat
 group chat

@@ -1,13 +1,18 @@
 import { useEffect } from "react";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveChat } from "../../../state/slices";
 import ProfilePic from "../ProfilePic";
 
 export function FriendDetails(props) {
   const friend = useSelector((state) => state.activeChat);
-  const [showChatOptions, setShowChatOptions] = useState(false);
   const dispatch = useDispatch();
+
+  const toggleChatOptions = () => {
+    const chatOptions = document.getElementById("chatOptions");
+    chatOptions.style.maxHeight === "0px"
+      ? (chatOptions.style.maxHeight = "80px")
+      : (chatOptions.style.maxHeight = "0px");
+  };
 
   useEffect(() => {
     document.addEventListener("click", (event) => {
@@ -15,7 +20,7 @@ export function FriendDetails(props) {
         !document.getElementById("chatOptions").contains(event.target) &&
         !document.getElementById("chatOptionsTriger").isEqualNode(event.target)
       ) {
-        setShowChatOptions(false);
+        document.getElementById("chatOptions").style.maxHeight = "0px";
       }
     });
     if (friend.username === undefined) {
@@ -45,24 +50,24 @@ export function FriendDetails(props) {
         <span className="fw-lighter">{friend.username}</span>
       </div>
       <i
-        className="fa-solid fa-ellipsis-vertical fs-2 ms-auto"
+        className="fa-solid fa-ellipsis-vertical fs-2 p-2 ms-auto"
         id="chatOptionsTriger"
         style={{ cursor: "pointer" }}
-        onClick={() => {
-          setShowChatOptions(!showChatOptions);
-        }}
+        onClick={toggleChatOptions}
       />
       <div
         id="chatOptions"
-        className="flex-column fs-5"
+        className="d-flex flex-column fs-5"
         style={{
-          display: showChatOptions ? "flex" : "none",
           position: "absolute",
           top: "100%",
           right: 0,
           userSelect: "none",
           zIndex: 2,
+          maxHeight: 0,
+          overflow: "hidden",
           backgroundColor: "rgb(24, 30, 34,0.6)",
+          transition: "max-height 0.3s ease-in-out",
         }}
       >
         <span

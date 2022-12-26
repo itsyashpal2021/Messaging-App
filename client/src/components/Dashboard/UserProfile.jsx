@@ -104,9 +104,9 @@ export function UserProfile(props) {
               </div>
             </div>
           </div>
-          <div className="d-flex flex-column align-items-end">
+          <div className="position-relative">
             <i
-              className="fa-solid fa-ellipsis-vertical fs-4 p-2"
+              className="fa-solid fa-ellipsis-vertical fs-4 p-2 ms-auto"
               onClick={() => {
                 const profilePicOptions =
                   document.getElementById("profilePicOptions");
@@ -129,9 +129,13 @@ export function UserProfile(props) {
               >
                 Upload Photo
               </span>
-              <span className="p-1" onClick={removeProfilePicture}>
-                Remove Photo
-              </span>
+              {userData.profilePic ? (
+                <span className="p-1" onClick={removeProfilePicture}>
+                  Remove Photo
+                </span>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
