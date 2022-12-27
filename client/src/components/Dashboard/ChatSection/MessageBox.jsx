@@ -13,8 +13,12 @@ export function MessageBox(props) {
   const dispatch = useDispatch();
 
   let lastDate = "";
+  const date = new Date();
+  const todayDate = date.toLocaleDateString("en-GB");
 
-  //this effect will be applied only if the friendname and username change
+  date.setDate(date.getDate() - 1);
+  const yesterdayDate = date.toLocaleDateString("en-GB");
+
   useEffect(() => {
     const getMessages = async () => {
       const response = await postToNodeServer(Routes.GET_MESSAGES_ROUTE, {
@@ -91,7 +95,11 @@ export function MessageBox(props) {
                     borderRadius: "20px",
                   }}
                 >
-                  {date}
+                  {date === todayDate
+                    ? "Today"
+                    : date === yesterdayDate
+                    ? "Yesterday"
+                    : date}
                 </span>
               ) : (
                 <></>

@@ -60,6 +60,14 @@ export const friendDataSlice = createSlice({
       state.friendList = newFriendList;
     },
 
+    removeFromFriendList: (state, action) => {
+      let newFriendList = state.friendList;
+      newFriendList = newFriendList.filter(
+        (friend) => friend.username !== action.payload
+      );
+      state.friendList = newFriendList;
+    },
+
     updateLastMessage: (state, action) => {
       const newFriendList = JSON.parse(JSON.stringify(state.friendList));
       const ind = newFriendList.findIndex(
@@ -117,6 +125,7 @@ export const {
   addToFriendRequestsSent,
   removeFromFriendRequestsSent,
   addToFriendList,
+  removeFromFriendList,
   updateLastMessage,
 } = friendDataSlice.actions;
 

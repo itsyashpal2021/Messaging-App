@@ -15,6 +15,7 @@ export const Routes = {
   SEND_MESSAGE_ROUTE: "/sendMessage",
   UPLOAD_PROFILE_PIC: "/uploadProfilePic",
   REMOVE_PROFILE_PIC: "/removeProfilePic",
+  UNFRIEND: "/unfriend",
 };
 
 export const getFormValues = (event) => {

@@ -18,6 +18,7 @@ export function UserProfile(props) {
   const dispatch = useDispatch();
 
   const [showFullProfilePic, setShowFullProfilePic] = useState(false);
+  const socket = props.socket;
 
   const onLogout = async () => {
     const response = await postToNodeServer(Routes.LOGOUT_ROUTE, {});
@@ -31,6 +32,11 @@ export function UserProfile(props) {
         })
       );
       dispatch(setActiveChat({}));
+
+      if (socket) {
+        socket.emit("logout", userData.username);
+      }
+
       navigate(Routes.LOGIN_ROUTE);
     }
   };

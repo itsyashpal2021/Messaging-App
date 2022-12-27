@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveChat } from "../../../state/slices";
+import { removeFromFriendList, setActiveChat } from "../../../state/slices";
 import ProfilePic from "../ProfilePic";
+import { postToNodeServer, Routes } from "../../../utils";
 
 export function FriendDetails(props) {
   const friend = useSelector((state) => state.activeChat);
@@ -28,6 +29,17 @@ export function FriendDetails(props) {
     }
   }, [friend]);
 
+  const unfriend = async () => {
+    const res = await postToNodeServer(Routes.UNFRIEND, {
+      friendUsername: friend.username,
+    });
+
+    if (res.status === 200) {
+      dispatch(removeFromFriendList(friend.username));
+      dispatch(setActiveChat({}));
+    }
+  };
+
   return (
     <div
       className="container-fluid p-sm-2 p-3 text-white d-flex align-items-center position-relative"
@@ -40,7 +52,7 @@ export function FriendDetails(props) {
       />
       <ProfilePic
         size="60px"
-        className="ms-1 me-3 fs-4"
+        className="ms-1 me-3 fs-2"
         src={friend.profilePic}
       />
       <div>
@@ -78,6 +90,7 @@ export function FriendDetails(props) {
           onMouseLeave={(event) => {
             event.target.style.backgroundColor = "transparent";
           }}
+          onClick={unfriend}
         >
           Unfriend
         </span>

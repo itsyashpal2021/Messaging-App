@@ -1,79 +1,13 @@
+//friends related posts --- friend requests and searching
+
 const { User, Message } = require("../db/index.js");
-const passport = require("passport");
+
 const {
   getDriveService,
-  uploadToDrive,
   getImageFromDrive,
-  removeFromDrive,
 } = require("../driveService/service.js");
 
 const driveService = getDriveService();
-
-const onRegister = async (req, res) => {
-  try {
-    const password = req.body.password;
-    const user = await User.register(new User(req.body), password);
-    await passport.authenticate("local")(req, res, function () {
-      res.status(200).json({ message: "SUCCESS" });
-    });
-  } catch (error) {
-    if (error.code === 11000 && error.keyPattern.email === 1) {
-      res
-        .status(400)
-        .json({ message: "A User with this Email is already registered." });
-    } else {
-      res.status(400).json({ message: error.message });
-    }
-  }
-};
-
-const checkSession = async (req, res) => {
-  try {
-    const sessionActive = req.isAuthenticated();
-    res.status(200).json({ sessionActive: sessionActive });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-const onLogin = async (req, res) => {
-  try {
-    const user = new User(req.body);
-    req.logIn(user, function (err) {
-      if (err) {
-        throw err;
-      } else {
-        passport.authenticate("local")(req, res, function () {
-          res.status(200).json({ message: "SUCCESS" });
-        });
-      }
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-const loadUser = async (req, res) => {
-  try {
-    if (req.isAuthenticated()) {
-      const userData = req.user.toObject();
-
-      res.status(200).json({
-        username: userData.username,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        profilePic: userData.profilePicId
-          ? await getImageFromDrive(userData.profilePicId, driveService)
-          : undefined,
-      });
-    } else {
-      res.status(401).send();
-    }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
 
 const getFriendData = async (req, res) => {
   try {
@@ -136,19 +70,6 @@ const getFriendData = async (req, res) => {
       friendList: userData.friendList,
       friendRequestsRecieved: userData.friendRequestsRecieved,
       friendRequestsSent: userData.friendRequestsSent,
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-const onLogout = async (req, res) => {
-  try {
-    req.logOut(function (err) {
-      if (err) {
-        throw err;
-      }
-      res.status(200).json({ message: "SUCCESS" });
     });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -267,61 +188,35 @@ const rejectFriendRequest = async (req, res) => {
   }
 };
 
-const getMessages = async (req, res) => {
+const unfriend = async (req, res) => {
   try {
-    const messages = await Message.find({
-      $or: [
-        {
-          $and: [{ from: req.body.username }, { to: req.body.friendUserName }],
-        },
-        {
-          $and: [{ from: req.body.friendUserName }, { to: req.body.username }],
-        },
-      ],
-    }).sort({
-      time: "asc",
+    const username = req.user.username;
+    const friendUsername = req.body.friendUsername;
+
+    const user = await User.findOne({ username: username });
+    const friendUser = await User.findOne({
+      username: friendUsername,
     });
 
-    res.status(200).json({ messages: messages });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-const sendMessage = async (req, res) => {
-  try {
-    const message = new Message(req.body);
-    await message.save();
-    res.status(200).json({ message: "SUCCESS" });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-const uploadProfilePic = async (req, res) => {
-  try {
-    const img = req.file;
-
-    const id = await uploadToDrive(img, driveService);
-
-    const user = await User.findOne({ username: req.user.username });
-    user.profilePicId = id;
+    user.friendList = user.friendList.filter((item) => item !== friendUsername);
     await user.save();
 
-    const base64Img = await getImageFromDrive(id, driveService);
-    res.status(200).json({ src: base64Img });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+    friendUser.friendList = friendUser.friendList.filter(
+      (item) => item !== username
+    );
+    await friendUser.save();
 
-const removeProfilePic = async (req, res) => {
-  try {
-    const user = await User.findOne({ username: req.user.username });
-    const id = user.profilePicId;
-    await removeFromDrive(id, driveService);
-    user.profilePicId = undefined;
-    await user.save();
+    await Message.deleteMany({
+      $or: [
+        {
+          $and: [{ from: username }, { to: friendUsername }],
+        },
+        {
+          $and: [{ to: username }, { from: friendUsername }],
+        },
+      ],
+    });
+
     res.status(200).json({ message: "SUCCESS" });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -329,18 +224,10 @@ const removeProfilePic = async (req, res) => {
 };
 
 module.exports = {
-  onRegister,
-  checkSession,
-  onLogin,
-  loadUser,
   getFriendData,
-  onLogout,
   onUserSearch,
   onSendFriendRequest,
   acceptFriendRequest,
   rejectFriendRequest,
-  getMessages,
-  sendMessage,
-  uploadProfilePic,
-  removeProfilePic,
+  unfriend,
 };

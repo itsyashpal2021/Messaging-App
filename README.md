@@ -17,3 +17,4 @@ notification tab for rejected/accepted frs
 check all comps rendering ...
 unfriend, clear chat
 group chat
+profile pic in search and fr's

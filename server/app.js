@@ -2,23 +2,28 @@ const express = require("express");
 const { User, connectToDb } = require("./db/index.js");
 const session = require("express-session");
 const passport = require("passport");
+
 const {
   onRegister,
+  checkSession,
   onLogin,
   loadUser,
+  uploadProfilePic,
+  removeProfilePic,
   onLogout,
+} = require("./posts/user.js");
+
+const {
+  getFriendData,
   onUserSearch,
   onSendFriendRequest,
   acceptFriendRequest,
   rejectFriendRequest,
-  sendMessage,
-  checkSession,
-  getFriendData,
-  getMessages,
-  uploadProfilePic,
-  removeProfilePic,
-} = require("./posts/posts.js");
-const { request } = require("express");
+  unfriend,
+} = require("./posts/friend.js");
+
+const { sendMessage, getMessages } = require("./posts/message.js");
+
 const multer = require("multer")();
 require("dotenv").config();
 
@@ -50,19 +55,22 @@ connectToDb();
 
 //handle all post requests from client.
 app.post("/register", onRegister);
-app.post("/checkSession", checkSession);
 app.post("/login", onLogin);
+app.post("/checkSession", checkSession);
+app.post("/uploadProfilePic", multer.single("profilePic"), uploadProfilePic);
+app.post("/removeProfilePic", removeProfilePic);
 app.post("/user", loadUser);
-app.post("/friendData", getFriendData);
 app.post("/logout", onLogout);
+
+app.post("/friendData", getFriendData);
 app.post("/searchUser", onUserSearch);
 app.post("/friendRequest", onSendFriendRequest);
 app.post("/acceptFriendRequest", acceptFriendRequest);
 app.post("/rejectFriendRequest", rejectFriendRequest);
+app.post("/unfriend", unfriend);
+
 app.post("/getMessages", getMessages);
 app.post("/sendMessage", sendMessage);
-app.post("/uploadProfilePic", multer.single("profilePic"), uploadProfilePic);
-app.post("/removeProfilePic", removeProfilePic);
 
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}.`);
@@ -106,5 +114,9 @@ io.on("connection", (socket) => {
       firstName: request.firstName,
       lastName: request.lastName,
     });
+  });
+
+  socket.on("logout", (username) => {
+    socket.leave(username);
   });
 });
