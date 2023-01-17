@@ -8,3 +8,7 @@
   background-color: rgb(102 102 105);
   border-radius: 20px;
 }
+
+.modal-backdrop {
+  background: transparent;
+}

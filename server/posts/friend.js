@@ -89,13 +89,18 @@ const onUserSearch = async (req, res) => {
       ],
     }).limit(5);
 
-    const searchResults = users.map((user) => {
-      return {
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      };
-    });
+    const searchResults = await Promise.all(
+      users.map(async (user) => {
+        return {
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          profilePic: user.profilePicId
+            ? await getImageFromDrive(user.profilePicId, driveService)
+            : undefined,
+        };
+      })
+    );
 
     res.status(200).json({ users: searchResults });
   } catch (error) {

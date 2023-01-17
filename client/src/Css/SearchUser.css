@@ -9,3 +9,67 @@
 .searchResult:hover {
   background-color: #777cbb;
 }
+
+#searchingAnimationDiv {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#searchingAnimationDiv .fa-users {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #2193b0;
+
+  background: linear-gradient(#2193b0, #6dd5ed);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+#spinner {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 6px;
+
+  animation-name: spin;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+#spinner i {
+  position: absolute;
+  bottom: 0;
+  transform: rotate(90deg);
+  color: darkseagreen;
+
+  animation-name: spin-reverse;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin-reverse {
+  from {
+    transform: rotate(90deg);
+  }
+  to {
+    transform: rotate(-270deg);
+  }
+}

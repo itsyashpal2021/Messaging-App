@@ -3,6 +3,9 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postToNodeServer, Routes } from "../../utils";
 import { addToFriendRequestsSent, setActiveChat } from "../../state/slices";
+import ProfilePic from "./ProfilePic";
+
+let controller = new AbortController();
 
 export function SearchUser(props) {
   const [searchResult, setSearchResult] = useState([]);
@@ -24,16 +27,46 @@ export function SearchUser(props) {
   const socket = props.socket;
 
   const onSearch = async (event) => {
-    const searchedUser = event.target.value;
-    if (searchedUser === "") {
-      setSearchResult([]);
-      return;
+    try {
+      const searchedUser = event.target.value;
+      document.getElementById("noResultDiv").style.display = "none";
+
+      controller.abort();
+      controller = new AbortController();
+
+      if (searchedUser === "") {
+        setSearchResult([]);
+        document.getElementById("searchingAnimationDiv").style.display = "none";
+
+        return;
+      }
+      document.getElementById("searchingAnimationDiv").style.display = "flex";
+
+      let response = await fetch(Routes.SEARCH_USER_ROUTE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          searchedUser: searchedUser,
+          currentUser: username,
+        }),
+        signal: controller.signal,
+      });
+
+      if (response.status === 200) {
+        response = await response.json();
+
+        if (response.users.length === 0) {
+          document.getElementById("noResultDiv").style.display = "block";
+        }
+
+        setSearchResult([...response.users]);
+        document.getElementById("searchingAnimationDiv").style.display = "none";
+      }
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("Error while searching the user.", error);
+      }
     }
-    const response = await postToNodeServer(Routes.SEARCH_USER_ROUTE, {
-      searchedUser: searchedUser,
-      currentUser: username,
-    });
-    if (response.status === 200) setSearchResult(response.users);
   };
 
   const addFriend = async (event, friendRequestUsername) => {
@@ -68,7 +101,21 @@ export function SearchUser(props) {
           event.target.style.outline = "none";
         }}
       />
-
+      <div
+        id="searchingAnimationDiv"
+        className="p-2"
+        style={{
+          display: "none",
+        }}
+      >
+        <i className="fa-solid fa-users fs-1 " />
+        <div id="spinner">
+          <i className="fa-solid fa-magnifying-glass fw-bold fs-3" />
+        </div>
+        <span className="fw-bolder fs-6 user-select-none">
+          Searching Users...
+        </span>
+      </div>
       <div>
         {searchResult.map((user) => {
           return (
@@ -81,16 +128,16 @@ export function SearchUser(props) {
                 }
               }}
             >
-              <div
-                className="profile-picture me-2 fs-3"
+              <ProfilePic
+                size="60px"
+                className="me-2 fs-3"
                 style={{
-                  width: "50px",
-                  height: "50px",
-                  borderColor: "black",
+                  flexGrow: 0,
+                  flexShrink: 0,
+                  border: user.profilePic ? "none" : "2px solid black",
                 }}
-              >
-                <i className="fa-solid fa-user" />
-              </div>
+                src={user.profilePic}
+              />
               <div>
                 <p className="fs-3 m-0">{user.username}</p>
                 <p className="h6 m-0">
@@ -115,6 +162,13 @@ export function SearchUser(props) {
             </div>
           );
         })}
+      </div>
+      <div
+        className="text-center pt-1"
+        id="noResultDiv"
+        style={{ display: "none" }}
+      >
+        <span className="text-white-50 h6">No Result Found!</span>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 Welcome to messaging app project.
-Tech stack : react (frontend) + nodeJs
+Tech stack : MERN
 
 ----- Milestones ----
 
@@ -10,11 +10,12 @@ Tech stack : react (frontend) + nodeJs
 5. profile picture.
 6. emojis, images and videos in the chat.
 7. unfriend, clear chat
+8. Email verification with otp
 
 TODO:
 
 notification tab for rejected/accepted frs
 check all comps rendering ...
-unfriend, clear chat
+clear chat
 group chat
-profile pic in search and fr's
+profile pic in fr's
