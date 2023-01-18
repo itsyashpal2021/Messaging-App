@@ -118,6 +118,10 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("unfriend", (request) => {
+    socket.in(request.friendUsername).emit("unfriended", request.username);
+  });
+
   socket.on("logout", (username) => {
     socket.leave(username);
   });

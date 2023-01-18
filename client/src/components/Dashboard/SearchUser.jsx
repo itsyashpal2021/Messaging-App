@@ -148,15 +148,15 @@ export function SearchUser(props) {
               </div>
               {friendRequestSent.has(user.username) ||
               friendRequestRecieved.has(user.username) ? (
-                <i className="fa-solid fa-check text-success ms-auto fs-5" />
+                <i className="fa-solid fa-check text-success ms-auto fs-5 p-1" />
               ) : friendUsernameList.has(user.username) === true ? (
                 <i
-                  className="fa-solid fa-user-check ms-auto fs-5"
+                  className="fa-solid fa-user-check ms-auto fs-5 p-1"
                   style={{ color: "#003080" }}
                 />
               ) : (
                 <i
-                  className="fa-solid fa-user-plus ms-auto fs-5"
+                  className="fa-solid fa-user-plus ms-auto fs-5 p-1"
                   style={{ cursor: "pointer" }}
                   onClick={(event) => addFriend(event, user.username)}
                 />

@@ -32,7 +32,7 @@ export function Chat(props) {
         <ChatAnimation />
       ) : (
         <div className="d-flex h-100 flex-column container-fluid p-0">
-          <FriendDetails />
+          <FriendDetails {...props}/>
           <MessageBox {...props} />
           <ChatBox {...props} isSmallWindow={isSmallWindow} />
         </div>

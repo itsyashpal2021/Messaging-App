@@ -20,18 +20,6 @@ export function FriendRequests(props) {
     (state) => state.friendData.friendRequestsRecieved
   );
 
-  const toggleShowRequests = (event) => {
-    const target = document.getElementById("friendRequestLabel");
-    if (showRequests) {
-      target.classList.remove("fa-caret-down");
-      target.classList.add("fa-caret-right");
-    } else {
-      target.classList.remove("fa-caret-right");
-      target.classList.add("fa-caret-down");
-    }
-    setShowRequets(!showRequests);
-  };
-
   const acceptFriendRequest = async (request) => {
     const friendRequestUsername = request.username;
     const response = await postToNodeServer(
@@ -86,10 +74,19 @@ export function FriendRequests(props) {
     >
       <div
         className="d-flex align-items-center text-warning"
-        onClick={toggleShowRequests}
+        onClick={() => {
+          setShowRequets(!showRequests);
+        }}
         style={{ cursor: "pointer", width: "fit-content", userSelect: "none" }}
       >
-        <i className="fa-solid fa-caret-right fs-4" id="friendRequestLabel" />
+        <i
+          className={
+            showRequests
+              ? "fa-solid fs-4 fa-caret-down"
+              : "fa-solid fs-4 fa-caret-right"
+          }
+          id="friendRequestLabel"
+        />
         <span className="h6 ms-2 m-0">Friend Requests</span>
         <div
           className="align-self-start ms-1 mt-1"
@@ -113,7 +110,7 @@ export function FriendRequests(props) {
           const username = request.username;
           return (
             <div
-              className="d-flex align-items-center my-2 container-fluid "
+              className="d-flex align-items-center my-2 container-fluid p-lg-2 p-md-0 p-sm-2 p-0"
               key={username}
             >
               <ProfilePic
@@ -124,19 +121,19 @@ export function FriendRequests(props) {
 
               <p className="fs-4 text-white m-0">{username}</p>
               <button
-                className="btn btn-primary ms-auto me-2"
-                style={{ height: "fit-content" }}
+                className="btn btn-success fs-6 fw-bold text-black ms-auto me-2 p-1"
                 onClick={() => acceptFriendRequest(request)}
               >
                 Accept
               </button>
               <button
-                className="btn btn-danger"
-                style={{ height: "fit-content" }}
+                className="btn btn-close btn-close-white p-1 ms-1"
                 onClick={() => rejectFriendRequest(username)}
-              >
-                Reject
-              </button>
+                style={{
+                  height: "0.4rem",
+                  width: "0.3rem",
+                }}
+              />
             </div>
           );
         })}

@@ -1,33 +1,27 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromFriendList, setActiveChat } from "../../../state/slices";
 import ProfilePic from "../ProfilePic";
 import { postToNodeServer, Routes } from "../../../utils";
 
 export function FriendDetails(props) {
+  const username = useSelector((state) => state.userData.username);
   const friend = useSelector((state) => state.activeChat);
   const dispatch = useDispatch();
 
-  const toggleChatOptions = () => {
-    const chatOptions = document.getElementById("chatOptions");
-    chatOptions.style.maxHeight === "0px"
-      ? (chatOptions.style.maxHeight = "80px")
-      : (chatOptions.style.maxHeight = "0px");
-  };
+  const socket = props.socket;
 
-  useEffect(() => {
-    document.addEventListener("click", (event) => {
-      if (
-        !document.getElementById("chatOptions").contains(event.target) &&
-        !document.getElementById("chatOptionsTriger").isEqualNode(event.target)
-      ) {
-        document.getElementById("chatOptions").style.maxHeight = "0px";
-      }
-    });
-    if (friend.username === undefined) {
-      document.removeEventListener("click");
+  const toggleChatOptions = () => {
+    const chatOptionsDiv = document.getElementById("chatOptionsDiv");
+    const chatOptions = document.querySelector("#chatOptionsDiv div");
+
+    if (chatOptionsDiv.style.height === "0px") {
+      chatOptionsDiv.style.height = "calc(100vh - 100%)";
+      chatOptions.style.maxHeight = "80px";
+    } else {
+      chatOptions.style.maxHeight = "0px";
+      chatOptionsDiv.style.height = "0px";
     }
-  }, [friend]);
+  };
 
   const unfriend = async () => {
     const res = await postToNodeServer(Routes.UNFRIEND, {
@@ -37,6 +31,11 @@ export function FriendDetails(props) {
     if (res.status === 200) {
       dispatch(removeFromFriendList(friend.username));
       dispatch(setActiveChat({}));
+
+      socket.emit("unfriend", {
+        username: username,
+        friendUsername: friend.username,
+      });
     }
   };
 
@@ -68,44 +67,56 @@ export function FriendDetails(props) {
         onClick={toggleChatOptions}
       />
       <div
-        id="chatOptions"
-        className="d-flex flex-column fs-5"
+        id="chatOptionsDiv"
         style={{
           position: "absolute",
           top: "100%",
           right: 0,
-          userSelect: "none",
+          height: "0",
+          width: "100vw",
           zIndex: 2,
-          maxHeight: 0,
-          overflow: "hidden",
-          backgroundColor: "rgb(24, 30, 34,0.6)",
-          transition: "max-height 0.3s ease-in-out",
         }}
+        onClick={toggleChatOptions}
       >
-        <span
-          className="py-1 px-2"
-          onMouseEnter={(event) => {
-            event.target.style.backgroundColor = "rgb(24, 30, 34,0.8)";
-          }}
-          onMouseLeave={(event) => {
-            event.target.style.backgroundColor = "transparent";
-          }}
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
-        >
-          Unfriend
-        </span>
-        <span
-          className="py-1 px-2"
-          onMouseEnter={(event) => {
-            event.target.style.backgroundColor = "rgb(24, 30, 34,0.8)";
-          }}
-          onMouseLeave={(event) => {
-            event.target.style.backgroundColor = "transparent";
+        <div
+          className="d-flex flex-column fs-5"
+          style={{
+            position: "absolute",
+            top: "0",
+            right: 0,
+            userSelect: "none",
+            zIndex: 2,
+            maxHeight: 0,
+            overflow: "hidden",
+            backgroundColor: "rgb(24, 30, 34,0.6)",
+            transition: "max-height 0.3s ease-in-out",
           }}
         >
-          Clear Chat
-        </span>
+          <span
+            className="py-1 px-2"
+            onMouseEnter={(event) => {
+              event.target.style.backgroundColor = "rgb(24, 30, 34,0.8)";
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.backgroundColor = "transparent";
+            }}
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            Unfriend
+          </span>
+          <span
+            className="py-1 px-2"
+            onMouseEnter={(event) => {
+              event.target.style.backgroundColor = "rgb(24, 30, 34,0.8)";
+            }}
+            onMouseLeave={(event) => {
+              event.target.style.backgroundColor = "transparent";
+            }}
+          >
+            Clear Chat
+          </span>
+        </div>
       </div>
 
       {/* <!-- Modal --> */}

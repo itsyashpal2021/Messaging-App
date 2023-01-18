@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import {
   addToFriendList,
   addToFriendRequestsRecieved,
+  removeFromFriendList,
   removeFromFriendRequestsSent,
   updateLastMessage,
 } from "../../../state/slices";
@@ -43,6 +44,11 @@ export function FriendSection(props) {
         dispatch(
           addToFriendList({ ...friend, lastMessage: "", lastMessageTime: 0 })
         );
+      });
+
+      //unfriended
+      socket.on("unfriended", (username) => {
+        dispatch(removeFromFriendList(username));
       });
     }
   }, [dispatch, socket]);
