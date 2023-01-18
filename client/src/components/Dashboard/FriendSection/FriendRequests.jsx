@@ -5,6 +5,7 @@ import {
   removeFromFriendRequestsRecieved,
 } from "../../../state/slices";
 import { postToNodeServer, Routes } from "../../../utils";
+import ProfilePic from "../ProfilePic";
 
 export function FriendRequests(props) {
   const [showRequests, setShowRequets] = useState(false);
@@ -31,7 +32,8 @@ export function FriendRequests(props) {
     setShowRequets(!showRequests);
   };
 
-  const acceptFriendRequest = async (friendRequestUsername) => {
+  const acceptFriendRequest = async (request) => {
+    const friendRequestUsername = request.username;
     const response = await postToNodeServer(
       Routes.ACCEPT_FRIEND_REQUEST_ROUTE,
       {
@@ -46,6 +48,7 @@ export function FriendRequests(props) {
         lastName: response.lastName,
         lastMessage: "",
         lastMessageTime: 0,
+        profilePic: request.profilePic,
       };
       dispatch(removeFromFriendRequestsRecieved(friendRequestUsername));
       dispatch(addToFriendList(friend));
@@ -54,6 +57,7 @@ export function FriendRequests(props) {
         friendRequestUsername: friendRequestUsername,
         firstName: userData.firstName,
         lastName: userData.lastName,
+        profilePic: userData.profilePic,
       });
     }
   };
@@ -100,32 +104,29 @@ export function FriendRequests(props) {
       </div>
       <div
         style={{
-          height: showRequests === false ? "0px" : "auto",
-          overflow: "hidden",
+          maxHeight: showRequests === false ? "0px" : "30vh",
+          overflowY: "scroll",
+          transition: "all 0.5s ",
         }}
       >
-        {friendRequests.map((username) => {
+        {friendRequests.map((request) => {
+          const username = request.username;
           return (
             <div
-              className="d-flex align-items-center my-2 container-fluid"
+              className="d-flex align-items-center my-2 container-fluid "
               key={username}
             >
-              <div
-                className="profile-picture me-2"
-                style={{
-                  borderColor: "#87c087",
-                  color: "#87c087",
-                  width: "40px",
-                  height: "40px",
-                }}
-              >
-                <i className="fa-solid fa-user fs-4" />
-              </div>
-              <p className="fs-3 text-white m-0">{username}</p>
+              <ProfilePic
+                size={"45px"}
+                src={request.profilePic}
+                className="me-2 border-0"
+              />
+
+              <p className="fs-4 text-white m-0">{username}</p>
               <button
                 className="btn btn-primary ms-auto me-2"
                 style={{ height: "fit-content" }}
-                onClick={() => acceptFriendRequest(username)}
+                onClick={() => acceptFriendRequest(request)}
               >
                 Accept
               </button>

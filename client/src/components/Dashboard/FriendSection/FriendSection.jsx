@@ -28,8 +28,8 @@ export function FriendSection(props) {
       });
 
       //new friend request
-      socket.on("new friend request", (username) => {
-        dispatch(addToFriendRequestsRecieved(username));
+      socket.on("new friend request", (request) => {
+        dispatch(addToFriendRequestsRecieved(request));
       });
 
       //friend request rejected

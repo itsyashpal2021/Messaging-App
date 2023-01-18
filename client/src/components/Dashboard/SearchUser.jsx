@@ -12,6 +12,7 @@ export function SearchUser(props) {
   const dispatch = useDispatch();
 
   const username = useSelector((state) => state.userData.username);
+  const profilePic = useSelector((state) => state.userData.profilePic);
   const friendUsernameList = new Set(
     useSelector((state) => state.friendData.friendList).map((friend) => {
       return friend.username;
@@ -84,6 +85,7 @@ export function SearchUser(props) {
         socket.emit("add friend", {
           username: username,
           friendRequestUsername: friendRequestUsername,
+          profilePic: profilePic,
         });
       }
     }

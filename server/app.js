@@ -97,9 +97,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("add friend", (request) => {
-    socket
-      .in(request.friendRequestUsername)
-      .emit("new friend request", request.username);
+    socket.in(request.friendRequestUsername).emit("new friend request", {
+      username: request.username,
+      profilePic: request.profilePic,
+    });
   });
 
   socket.on("friend request rejected", (request) => {
@@ -113,6 +114,7 @@ io.on("connection", (socket) => {
       username: request.username,
       firstName: request.firstName,
       lastName: request.lastName,
+      profilePic: request.profilePic,
     });
   });
 

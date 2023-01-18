@@ -18,4 +18,4 @@ notification tab for rejected/accepted frs
 check all comps rendering ...
 clear chat
 group chat
-profile pic in fr's
+unfriend socket.io

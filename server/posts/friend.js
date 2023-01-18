@@ -66,6 +66,22 @@ const getFriendData = async (req, res) => {
         : 0
     );
 
+    //add profile pic to friend requests
+    userData.friendRequestsRecieved = await Promise.all(
+      userData.friendRequestsRecieved.map(async (friendRequestUsername) => {
+        const friendUser = await User.findOne({
+          username: friendRequestUsername,
+        });
+
+        return {
+          username: friendRequestUsername,
+          profilePic: friendUser.profilePicId
+            ? await getImageFromDrive(friendUser.profilePicId, driveService)
+            : undefined,
+        };
+      })
+    );
+
     res.status(200).json({
       friendList: userData.friendList,
       friendRequestsRecieved: userData.friendRequestsRecieved,

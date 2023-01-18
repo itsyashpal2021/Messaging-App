@@ -39,7 +39,9 @@ export const friendDataSlice = createSlice({
 
     removeFromFriendRequestsRecieved: (state, action) => {
       let newList = state.friendRequestsRecieved;
-      newList = newList.filter((username) => username !== action.payload);
+      newList = newList.filter(
+        (request) => request.username !== action.payload
+      );
       state.friendRequestsRecieved = newList;
     },
 
