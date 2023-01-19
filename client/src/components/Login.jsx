@@ -12,7 +12,7 @@ export function LoginForm(props) {
   const dispatch = useDispatch();
   const [labelVisible, setLabelVisible] = useState(false);
   const [sessionActive, setSessionActive] = useState(true);
-  document.title = "Login";
+  document.title = "Login | Talkato";
 
   useEffect(() => {
     async function checkSession() {

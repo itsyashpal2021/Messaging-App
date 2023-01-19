@@ -9,7 +9,7 @@ export function RegisterForm(props) {
   const [labelVisible, setLabelVisible] = useState(false);
   const [labelText, setLabelText] = useState("");
   const [sessionActive, setSessionActive] = useState(true);
-  document.title = "Register";
+  document.title = "Register | Talkato";
 
   useEffect(() => {
     async function checkSession() {
