@@ -63,7 +63,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //mongo db connection
-connectToDb();
 
 //handle all post requests from client.
 app.post("/register", onRegister);
@@ -84,57 +83,59 @@ app.post("/unfriend", unfriend);
 app.post("/getMessages", getMessages);
 app.post("/sendMessage", sendMessage);
 
-const server = app.listen(port, () => {
-  console.log(`Server is running on port ${port}.`);
-});
-
-const io = require("socket.io")(server, {
-  pingTimeout: 60000,
-  cors: {
-    origin: "http://localhost:3000",
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log("Connected to socket.io");
-
-  socket.on("setup", (username) => {
-    socket.join(username);
-    console.log("joined room", username);
-    socket.emit("connected");
+connectToDb().then(() => {
+  const server = app.listen(port, () => {
+    console.log(`Server is running on port ${port}.`);
   });
 
-  socket.on("send message", (message) => {
-    socket.in(message.to).emit("new message", message);
+  const io = require("socket.io")(server, {
+    pingTimeout: 60000,
+    cors: {
+      origin: "http://localhost:3000",
+    },
   });
 
-  socket.on("add friend", (request) => {
-    socket.in(request.friendRequestUsername).emit("new friend request", {
-      username: request.username,
-      profilePic: request.profilePic,
+  io.on("connection", (socket) => {
+    console.log("Connected to socket.io");
+
+    socket.on("setup", (username) => {
+      socket.join(username);
+      console.log("joined room", username);
+      socket.emit("connected");
     });
-  });
 
-  socket.on("friend request rejected", (request) => {
-    socket
-      .in(request.friendRequestUsername)
-      .emit("friend request rejected", request.username);
-  });
-
-  socket.on("friend request accepted", (request) => {
-    socket.in(request.friendRequestUsername).emit("friend request accepted", {
-      username: request.username,
-      firstName: request.firstName,
-      lastName: request.lastName,
-      profilePic: request.profilePic,
+    socket.on("send message", (message) => {
+      socket.in(message.to).emit("new message", message);
     });
-  });
 
-  socket.on("unfriend", (request) => {
-    socket.in(request.friendUsername).emit("unfriended", request.username);
-  });
+    socket.on("add friend", (request) => {
+      socket.in(request.friendRequestUsername).emit("new friend request", {
+        username: request.username,
+        profilePic: request.profilePic,
+      });
+    });
 
-  socket.on("logout", (username) => {
-    socket.leave(username);
+    socket.on("friend request rejected", (request) => {
+      socket
+        .in(request.friendRequestUsername)
+        .emit("friend request rejected", request.username);
+    });
+
+    socket.on("friend request accepted", (request) => {
+      socket.in(request.friendRequestUsername).emit("friend request accepted", {
+        username: request.username,
+        firstName: request.firstName,
+        lastName: request.lastName,
+        profilePic: request.profilePic,
+      });
+    });
+
+    socket.on("unfriend", (request) => {
+      socket.in(request.friendUsername).emit("unfriended", request.username);
+    });
+
+    socket.on("logout", (username) => {
+      socket.leave(username);
+    });
   });
 });
