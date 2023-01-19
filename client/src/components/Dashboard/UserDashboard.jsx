@@ -17,8 +17,8 @@ export function UserDashboard(props) {
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  if (username) document.title = `${username} | Messaging App`;
-  
+  if (username) document.title = `${username} | Talkato`;
+
   useEffect(() => {
     getUserData(dispatch, navigate);
     getFriendData(dispatch);
@@ -40,7 +40,7 @@ export function UserDashboard(props) {
     <div className="container-fluid row m-0 p-0 h-100">
       <div className="col-12 col-md-5 col-xxl-4 p-0 h-100">
         <div className="d-flex flex-column h-100 container-fluid p-0">
-          <UserProfile socket={socket}/>
+          <UserProfile socket={socket} />
           <FriendSection socket={socket} />
         </div>
       </div>

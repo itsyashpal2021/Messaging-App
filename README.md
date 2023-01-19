@@ -1,4 +1,4 @@
-Welcome to messaging app project.
+Welcome to Talkato  -- A messaging app  project.
 Tech stack : MERN
 
 ----- Milestones ----
