@@ -116,7 +116,11 @@ export function FriendRequests(props) {
               <ProfilePic
                 size={"45px"}
                 src={request.profilePic}
-                className="me-2 border-0"
+                className="me-2 fs-4"
+                style={{
+                  border: request.profilePic ? "none" : "2px solid #8EA7E9",
+                  color: "#8EA7E9",
+                }}
               />
 
               <p className="fs-4 text-white m-0">{username}</p>
