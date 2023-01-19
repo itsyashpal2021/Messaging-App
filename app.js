@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const { User, connectToDb } = require("./db/index.js");
 const session = require("express-session");
 const passport = require("passport");
@@ -31,6 +32,17 @@ const app = express();
 const port = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+//serving
+app.use(express.static(path.join(__dirname, "./client/build")));
+app.get("*", function (_, res) {
+  res.sendFile(
+    path.join(__dirname, "./client/build/index.html"),
+    function (err) {
+      res.status(500).send(err);
+    }
+  );
+});
 
 //initialize session
 app.use(
