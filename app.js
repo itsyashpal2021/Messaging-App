@@ -34,15 +34,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //serving
-app.use(express.static(path.join(__dirname, "./client/build")));
-app.get("*", function (_, res) {
-  res.sendFile(
-    path.join(__dirname, "./client/build/index.html"),
-    function (err) {
-      res.status(500).send(err);
-    }
+if (process.env.NODE_ENV === "production") {
+  //*Set static folder up in production
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
   );
-});
+}
 
 //initialize session
 app.use(
