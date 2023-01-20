@@ -4,7 +4,7 @@ const path = require("path");
 const folderId = process.env.FOLDER_ID;
 
 const getDriveService = () => {
-  const KEYFILEPATH = path.join(__dirname, "key.json");
+  const KEYFILEPATH = path.join(__dirname, "../key.json");
   const SCOPES = ["https://www.googleapis.com/auth/drive"];
 
   const auth = new google.auth.GoogleAuth({
