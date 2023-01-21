@@ -1,5 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromFriendList, setActiveChat } from "../../../state/slices";
+import {
+  clearChat,
+  removeFromFriendList,
+  setActiveChat,
+} from "../../../state/slices";
 import ProfilePic from "../ProfilePic";
 import { postToNodeServer, Routes } from "../../../utils";
 
@@ -31,6 +35,7 @@ export function FriendDetails(props) {
     if (res.status === 200) {
       dispatch(removeFromFriendList(friend.username));
       dispatch(setActiveChat({}));
+      dispatch(clearChat(friend.username));
 
       socket.emit("unfriend", {
         username: username,

@@ -69,29 +69,6 @@ export const friendDataSlice = createSlice({
       );
       state.friendList = newFriendList;
     },
-
-    updateLastMessage: (state, action) => {
-      const newFriendList = JSON.parse(JSON.stringify(state.friendList));
-      const ind = newFriendList.findIndex(
-        (friend) => friend.username === action.payload.username
-      );
-
-      if (ind === -1) {
-        console.error("Friend not found in friendList.");
-        return;
-      }
-
-      newFriendList[ind].lastMessage = action.payload.lastMessage;
-      newFriendList[ind].lastMessageTime = action.payload.lastMessageTime;
-
-      newFriendList.sort(function (a, b) {
-        if (a.lastMessageTime < b.lastMessageTime) return 1;
-        else if (a.lastMessageTime > b.lastMessageTime) return -1;
-        return 0;
-      });
-
-      state.friendList = newFriendList;
-    },
   },
 });
 
@@ -104,14 +81,27 @@ export const activeChatSlice = createSlice({
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
-      state.messages = action.payload.messages ? action.payload.messages : [];
       state.profilePic = action.payload.profilePic;
     },
+  },
+});
+
+export const chatDataSlice = createSlice({
+  name: "chatData",
+  initialState: {},
+  reducers: {
     setMessages: (state, action) => {
-      state.messages = [...action.payload];
+      state.messages = action.payload;
     },
-    addToMessages: (state, action) => {
-      state.messages.push(action.payload);
+    addMessage: (state, action) => {
+      const { friend, message } = action.payload;
+      state.messages[friend].push(message);
+    },
+    clearChat: (state, action) => {
+      delete state.messages[action.payload];
+    },
+    newChat: (state, action) => {
+      state.messages[action.payload] = [];
     },
   },
 });
@@ -128,14 +118,16 @@ export const {
   removeFromFriendRequestsSent,
   addToFriendList,
   removeFromFriendList,
-  updateLastMessage,
 } = friendDataSlice.actions;
 
-export const { setActiveChat, setMessages, addToMessages } =
-  activeChatSlice.actions;
+export const { setActiveChat, addToMessages } = activeChatSlice.actions;
+
+export const { setMessages, addMessage, clearChat, newChat } =
+  chatDataSlice.actions;
 
 export default combineReducers({
   userData: userSlice.reducer,
   friendData: friendDataSlice.reducer,
   activeChat: activeChatSlice.reducer,
+  chatData: chatDataSlice.reducer,
 });

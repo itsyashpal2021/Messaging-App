@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToFriendList,
+  newChat,
   removeFromFriendRequestsRecieved,
 } from "../../../state/slices";
 import { postToNodeServer, Routes } from "../../../utils";
@@ -34,12 +35,12 @@ export function FriendRequests(props) {
         username: friendRequestUsername,
         firstName: response.firstName,
         lastName: response.lastName,
-        lastMessage: "",
-        lastMessageTime: 0,
         profilePic: request.profilePic,
       };
       dispatch(removeFromFriendRequestsRecieved(friendRequestUsername));
       dispatch(addToFriendList(friend));
+      dispatch(newChat(friendRequestUsername));
+
       socket.emit("friend request accepted", {
         username: username,
         friendRequestUsername: friendRequestUsername,

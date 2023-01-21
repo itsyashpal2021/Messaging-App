@@ -33,7 +33,7 @@ const port = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//serving
+//serving static files in prod
 if (process.env.NODE_ENV === "production") {
   //*Set static folder up in production
   app.use(express.static("client/build"));

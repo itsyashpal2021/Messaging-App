@@ -4,11 +4,13 @@ import { FriendList } from "./FriendList";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
+  addMessage,
   addToFriendList,
   addToFriendRequestsRecieved,
+  clearChat,
+  newChat,
   removeFromFriendList,
   removeFromFriendRequestsSent,
-  updateLastMessage,
 } from "../../../state/slices";
 
 export function FriendSection(props) {
@@ -17,13 +19,12 @@ export function FriendSection(props) {
 
   useEffect(() => {
     if (socket) {
-      //update last message in friendlist.
+      //new message arrival
       socket.on("new message", (message) => {
         dispatch(
-          updateLastMessage({
-            username: message.from,
-            lastMessage: message.message,
-            lastMessageTime: message.time,
+          addMessage({
+            friend: message.from,
+            message: message,
           })
         );
       });
@@ -44,11 +45,13 @@ export function FriendSection(props) {
         dispatch(
           addToFriendList({ ...friend, lastMessage: "", lastMessageTime: 0 })
         );
+        dispatch(newChat(friend.username));
       });
 
       //unfriended
       socket.on("unfriended", (username) => {
         dispatch(removeFromFriendList(username));
+        dispatch(clearChat(username));
       });
     }
   }, [dispatch, socket]);

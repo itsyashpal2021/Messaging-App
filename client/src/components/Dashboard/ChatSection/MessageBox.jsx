@@ -7,9 +7,10 @@ import { postToNodeServer } from "../../../utils";
 export function MessageBox(props) {
   const username = useSelector((state) => state.userData.username);
   const friendUserName = useSelector((state) => state.activeChat.username);
-  const messages = useSelector((state) => state.activeChat.messages);
+  const messages = useSelector(
+    (state) => state.chatData.messages[friendUserName]
+  );
 
-  const socket = props.socket;
   const dispatch = useDispatch();
 
   let lastDate = "";
@@ -43,17 +44,10 @@ export function MessageBox(props) {
 
   //this effect will be applied on every time messages change
   useEffect(() => {
-    if (socket) {
-      socket.once("new message", (message) => {
-        if (message.from === friendUserName)
-          dispatch(setMessages([...messages, message]));
-      });
-    }
-
     //scroll to bottom
     const messageBox = document.getElementById("messageBox");
     messageBox.scrollTop = messageBox.scrollHeight;
-  }, [messages, friendUserName, socket, dispatch]);
+  }, [messages]);
 
   return (
     <div className="container-fluid p-0 d-flex flex-column h-100 overflow-hidden">

@@ -2,18 +2,29 @@ const { Message } = require("../db/index.js");
 
 const getMessages = async (req, res) => {
   try {
-    const messages = await Message.find({
-      $or: [
+    const friendList = req.user.friendList;
+    const username = req.user.username;
+
+    const messages = {};
+    for (let friendUserName of friendList) {
+      const friendMessages = await Message.find(
         {
-          $and: [{ from: req.body.username }, { to: req.body.friendUserName }],
+          $or: [
+            {
+              $and: [{ from: username }, { to: friendUserName }],
+            },
+            {
+              $and: [{ from: friendUserName }, { to: username }],
+            },
+          ],
         },
-        {
-          $and: [{ from: req.body.friendUserName }, { to: req.body.username }],
-        },
-      ],
-    }).sort({
-      time: "asc",
-    });
+        { _id: 0, __v: 0 }
+      ).sort({
+        time: "asc",
+      });
+
+      messages[friendUserName] = friendMessages;
+    }
 
     res.status(200).json({ messages: messages });
   } catch (error) {

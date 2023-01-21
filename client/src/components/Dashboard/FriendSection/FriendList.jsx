@@ -5,6 +5,8 @@ import ProfilePic from "../ProfilePic";
 export function FriendList(props) {
   const friendList = useSelector((state) => state.friendData.friendList);
   const activeChat = useSelector((state) => state.activeChat);
+  const messages = useSelector((state) => state.chatData.messages);
+
   const dispatch = useDispatch();
 
   return (
@@ -17,6 +19,8 @@ export function FriendList(props) {
       }}
     >
       {friendList.map((friend) => {
+        const lastMessage = messages[friend.username].slice(-1)[0];
+
         return (
           <div
             key={friend.username}
@@ -68,19 +72,21 @@ export function FriendList(props) {
               <span className="fs-3 text-white lh-1">
                 {friend.firstName} {friend.lastName}
               </span>
-              <div className="d-flex align-items-center justify-content-between mt-1">
-                <span className="fs-6" style={{ color: "#e5e5ac" }}>
-                  {friend.lastMessage}
-                </span>
-                <span className="text-muted" style={{ fontSize: "10px" }}>
-                  {friend.lastMessageTime === 0
-                    ? ""
-                    : new Date(friend.lastMessageTime).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                </span>
-              </div>
+              {lastMessage ? (
+                <div className="d-flex align-items-center justify-content-between mt-1">
+                  <span className="fs-6" style={{ color: "#e5e5ac" }}>
+                    {lastMessage.message}
+                  </span>
+                  <span className="text-muted" style={{ fontSize: "10px" }}>
+                    {new Date(lastMessage.time).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         );

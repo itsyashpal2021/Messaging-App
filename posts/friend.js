@@ -18,38 +18,16 @@ const getFriendData = async (req, res) => {
 
     const userData = await req.user.toObject();
 
-    //populate friend list with friend details and last messages
+    //populate friend list with friend details
     userData.friendList = await Promise.all(
       userData.friendList.map(async (friendUserName) => {
         const friendUser = await User.findOne({ username: friendUserName });
-        let messages = await Message.find({
-          $or: [
-            {
-              $and: [{ from: userData.username }, { to: friendUser.username }],
-            },
-            {
-              $and: [{ to: userData.username }, { from: friendUser.username }],
-            },
-          ],
-        }).sort({
-          time: "desc",
-        });
-
-        if (messages.length === 0) {
-          messages = [
-            {
-              message: "",
-              time: 0,
-            },
-          ];
-        }
 
         return {
           username: friendUser.username,
           firstName: friendUser.firstName,
           lastName: friendUser.lastName,
-          lastMessage: messages[0].message,
-          lastMessageTime: messages[0].time,
+          email: friendUser.email,
           profilePic: friendUser.profilePicId
             ? await getImageFromDrive(friendUser.profilePicId, driveService)
             : undefined,

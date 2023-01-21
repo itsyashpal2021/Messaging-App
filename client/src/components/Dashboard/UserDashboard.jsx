@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getFriendData, getUserData } from "../../utils";
+import { getFriendData, getMessages, getUserData } from "../../utils";
 import { Loading } from "../Loading";
 import { UserProfile } from "./UserProfile";
 import { FriendSection } from "./FriendSection/FriendSection";
@@ -12,6 +12,8 @@ import { useState } from "react";
 export function UserDashboard(props) {
   const username = useSelector((state) => state.userData.username);
   const friendData = useSelector((state) => state.friendData);
+  const chatData = useSelector((state) => state.chatData);
+
   const [socket, setSocket] = useState();
 
   let navigate = useNavigate();
@@ -20,9 +22,13 @@ export function UserDashboard(props) {
   if (username) document.title = `${username} | Talkato`;
 
   useEffect(() => {
-    getUserData(dispatch, navigate);
-    getFriendData(dispatch);
-    setSocket(io());
+    const load = async () => {
+      await getUserData(dispatch, navigate);
+      await getFriendData(dispatch);
+      await getMessages(dispatch);
+      setSocket(io());
+    };
+    load();
   }, [dispatch, navigate]);
 
   useEffect(() => {
@@ -34,8 +40,11 @@ export function UserDashboard(props) {
     }
   }, [socket, username]);
 
-  return !(username && friendData.friendList) ? (
-    <Loading userFetched={username !== undefined} />
+  return !(username && friendData.friendList && chatData.messages) ? (
+    <Loading
+      userFetched={username !== undefined}
+      friendDataFetched={friendData.friendList !== undefined}
+    />
   ) : (
     <div className="container-fluid row m-0 p-0 h-100">
       <div className="col-12 col-md-5 col-xxl-4 p-0 h-100">

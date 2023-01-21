@@ -1,4 +1,4 @@
-import { setUser, setFriendData } from "./state/slices";
+import { setUser, setFriendData, setMessages } from "./state/slices";
 
 export const Routes = {
   REGISTER_ROUTE: "/register",
@@ -62,7 +62,7 @@ export const getUserData = async (dispatch, navigate) => {
       console.log("Recieved invalid response", response);
     }
   } catch (error) {
-    console.error("Error while fetching userData", error.message);
+    console.error("Error while fetching userData.", error.message);
   }
 };
 
@@ -72,6 +72,16 @@ export const getFriendData = async (dispatch) => {
     dispatch(setFriendData(response));
     console.log("Friend Data updated");
   } catch (error) {
-    console.error("Error while fetching friendData", error.message);
+    console.error("Error while fetching friendData.", error.message);
+  }
+};
+
+export const getMessages = async (dispatch) => {
+  try {
+    const response = await postToNodeServer(Routes.GET_MESSAGES_ROUTE, {});
+    dispatch(setMessages(response.messages));
+    console.log("Messages fetched.");
+  } catch (error) {
+    console.error("Error while fetching Messages.", error.message);
   }
 };

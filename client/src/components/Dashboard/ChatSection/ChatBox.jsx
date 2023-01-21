@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Routes, postToNodeServer } from "../../../utils";
 import EmojiPicker from "emoji-picker-react";
 import { useState } from "react";
-import { addToMessages, updateLastMessage } from "../../../state/slices";
+import { addMessage } from "../../../state/slices";
 import { useEffect } from "react";
 
 export function ChatBox(props) {
@@ -34,22 +34,18 @@ export function ChatBox(props) {
 
     if (response.status === 200) {
       chatbox.value = "";
-      emitMessage(message);
+
       dispatch(
-        updateLastMessage({
-          username: message.to,
-          lastMessage: message.message,
-          lastMessageTime: message.time,
+        addMessage({
+          friend: message.to,
+          message: message,
         })
       );
-    }
-  };
 
-  const emitMessage = (message) => {
-    if (socket) {
-      socket.emit("send message", message);
+      if (socket) {
+        socket.emit("send message", message);
+      }
     }
-    dispatch(addToMessages(message));
   };
 
   return (
