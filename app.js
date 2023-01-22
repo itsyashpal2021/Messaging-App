@@ -12,6 +12,8 @@ const {
   uploadProfilePic,
   removeProfilePic,
   onLogout,
+  sendOtp,
+  changePassword,
 } = require("./posts/user.js");
 
 const {
@@ -81,6 +83,9 @@ app.post("/unfriend", unfriend);
 
 app.post("/getMessages", getMessages);
 app.post("/sendMessage", sendMessage);
+
+app.post("/sendOtp", sendOtp);
+app.post("/changePassword", changePassword);
 
 connectToDb().then(() => {
   const server = app.listen(port, () => {

@@ -114,13 +114,20 @@ export function LoginForm(props) {
               style={{ display: startWaitingAnimation ? "block" : "none" }}
             />
           </button>
-          <Link
-            to="/register"
-            className="fs-6 mt-2 d-block text-info text-decoration-none user-select-none"
-            style={{ width: "fit-content" }}
-          >
-            Register New User
-          </Link>
+          <div className="d-flex flex-wrap  mt-2 justify-content-between fs-6 user-select-none ">
+            <Link
+              to="/register"
+              className="text-info text-decoration-none mt-1"
+            >
+              Register New User
+            </Link>
+            <Link
+              to="/forgotPassword"
+              className="text-danger text-decoration-none mt-1"
+            >
+              Forgot Password ?
+            </Link>
+          </div>
         </div>
       </div>
     </form>

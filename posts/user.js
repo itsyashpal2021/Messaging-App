@@ -1,5 +1,4 @@
 //user related posts for logIn,logOut,register and profile picture
-
 const { User } = require("../db/index.js");
 const passport = require("passport");
 const {
@@ -7,9 +6,15 @@ const {
   uploadToDrive,
   getImageFromDrive,
   removeFromDrive,
-} = require("../driveService/service.js");
+} = require("../services/driveService.js");
+
+const {
+  createTransporter,
+  sendOtpToMail,
+} = require("../services/nodeMailerService.js");
 
 const driveService = getDriveService();
+const nodeMailerTransporter = createTransporter();
 
 const onRegister = async (req, res) => {
   try {
@@ -120,6 +125,36 @@ const onLogout = async (req, res) => {
   }
 };
 
+const sendOtp = async (req, res) => {
+  try {
+    const email = req.body.email;
+    const user = await User.findOne({ email: email });
+
+    //if no user with this email.
+    if (!user)
+      res
+        .status(400)
+        .json({ message: "User with given Email Id does not Exist." });
+    else {
+      const otp = await sendOtpToMail(email, nodeMailerTransporter);
+      res.status(200).json({ otp: otp });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const changePassword = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    await user.setPassword(req.body.password);
+    await user.save();
+
+    res.status(200).json({ message: "SUCCESS" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 module.exports = {
   onRegister,
   checkSession,
@@ -128,4 +163,6 @@ module.exports = {
   uploadProfilePic,
   removeProfilePic,
   onLogout,
+  sendOtp,
+  changePassword,
 };

@@ -5,7 +5,7 @@ const { User, Message } = require("../db/index.js");
 const {
   getDriveService,
   getImageFromDrive,
-} = require("../driveService/service.js");
+} = require("../services/driveService.js");
 
 const driveService = getDriveService();
 

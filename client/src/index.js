@@ -8,6 +8,7 @@ import { UserDashboard } from "./components/Dashboard/UserDashboard";
 import store from "./state/store";
 import { Provider } from "react-redux";
 import "./Css/Global.css";
+import ResetPasswordForm from "./components/ResetPasswordForm";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: Routes.REGISTER_ROUTE,
     element: <RegisterForm />,
+  },
+  {
+    path: Routes.FORGOT_PASSWORD_ROUTE,
+    element: <ResetPasswordForm />,
   },
   {
     path: Routes.USER_ROUTE,

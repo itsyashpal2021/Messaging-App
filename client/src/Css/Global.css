@@ -17,3 +17,10 @@
   box-shadow: none !important;
   border: none;
 }
+
+/* remove arrow buttons from input fields */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

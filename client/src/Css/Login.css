@@ -40,6 +40,10 @@ form {
   accent-color: #6901ff;
 }
 
-#formDiv a:hover {
+#formDiv a {
   font-weight: 500;
+}
+
+#formDiv a:hover {
+  font-weight: bolder;
 }

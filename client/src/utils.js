@@ -4,6 +4,7 @@ export const Routes = {
   REGISTER_ROUTE: "/register",
   CHECK_SESSION_ROUTE: "/checkSession",
   LOGIN_ROUTE: "/login",
+  FORGOT_PASSWORD_ROUTE: "/forgotPassword",
   USER_ROUTE: "/user",
   FRIEND_DATA_ROUTE: "/friendData",
   LOGOUT_ROUTE: "/logout",
@@ -16,6 +17,8 @@ export const Routes = {
   UPLOAD_PROFILE_PIC: "/uploadProfilePic",
   REMOVE_PROFILE_PIC: "/removeProfilePic",
   UNFRIEND: "/unfriend",
+  SEND_OTP_ROUTE: "/sendOtp",
+  CHANGE_PASSWORD_ROUTE: "/changePassword",
 };
 
 export const getFormValues = (event) => {

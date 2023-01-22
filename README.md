@@ -10,6 +10,6 @@ Tech stack : MERN
 5. profile picture.
 6. emojis, images and videos in the chat.
 7. unfriend, clear chat
-8. Email verification with otp
+8. Email verification with otp and forgot password.
 9. Group Chat
 10. Notification tab for fr rejected/accepted
