@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { postToNodeServer, Routes } from "../../utils";
 import { addToFriendRequestsSent, setActiveChat } from "../../state/slices";
 import ProfilePic from "./ProfilePic";
+import WaitingAnimation from "../WaitingAnimation";
 
 let controller = new AbortController();
 
@@ -71,10 +72,14 @@ export function SearchUser(props) {
   };
 
   const addFriend = async (event, friendRequestUsername) => {
+    event.target.querySelector(".waitingAnimationDiv").style.display = "block";
+
     const response = await postToNodeServer(Routes.FRIEND_REQUEST_ROUTE, {
       username: username,
       friendRequestUsername: friendRequestUsername,
     });
+
+    event.target.querySelector(".waitingAnimationDiv").style.display = "none";
     if (response.status === 200) {
       const btn = event.target;
       btn.classList.remove("fa-user");
@@ -156,10 +161,15 @@ export function SearchUser(props) {
                 />
               ) : (
                 <i
-                  className="fa-solid fa-user-plus ms-auto fs-5 p-1"
+                  className="fa-solid fa-user-plus ms-auto fs-5 p-1 position-relative"
                   style={{ cursor: "pointer" }}
-                  onClick={(event) => addFriend(event, user.username)}
-                />
+                  onClick={(event) => {
+                    addFriend(event, user.username);
+                  }}
+                >
+                  <WaitingAnimation
+                  />
+                </i>
               )}
             </div>
           );

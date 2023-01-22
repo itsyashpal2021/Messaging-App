@@ -1,11 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveChat, setMessages } from "../../../state/slices";
-import { Routes } from "../../../utils";
-import { postToNodeServer } from "../../../utils";
+import { setActiveChat } from "../../../state/slices";
 
 export function MessageBox(props) {
-  const username = useSelector((state) => state.userData.username);
   const friendUserName = useSelector((state) => state.activeChat.username);
   const messages = useSelector(
     (state) => state.chatData.messages[friendUserName]
@@ -21,18 +18,6 @@ export function MessageBox(props) {
   const yesterdayDate = date.toLocaleDateString("en-GB");
 
   useEffect(() => {
-    const getMessages = async () => {
-      const response = await postToNodeServer(Routes.GET_MESSAGES_ROUTE, {
-        username: username,
-        friendUserName: friendUserName,
-      });
-
-      if (response.status === 200) {
-        dispatch(setMessages(response.messages));
-      }
-    };
-    getMessages();
-
     window.addEventListener(
       "popstate",
       function (event) {
@@ -40,7 +25,7 @@ export function MessageBox(props) {
       },
       { once: true }
     );
-  }, [username, friendUserName, dispatch]);
+  }, [dispatch]);
 
   //this effect will be applied on every time messages change
   useEffect(() => {

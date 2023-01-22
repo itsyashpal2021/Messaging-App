@@ -6,11 +6,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { setActiveChat } from "../state/slices";
 import { getFormValues, postToNodeServer, Routes } from "../utils.js";
 import "../Css/Login.css";
+import WaitingAnimation from "./WaitingAnimation";
 
 export function LoginForm(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [labelVisible, setLabelVisible] = useState(false);
+  const [startWaitingAnimation, setStartWaitingAnimation] = useState(false);
   const [sessionActive, setSessionActive] = useState(true);
   document.title = "Login | Talkato";
 
@@ -28,10 +30,14 @@ export function LoginForm(props) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setStartWaitingAnimation(true);
+    setLabelVisible(false);
+
     const formValues = getFormValues(event);
 
     const response = await postToNodeServer(Routes.LOGIN_ROUTE, formValues);
 
+    setStartWaitingAnimation(false);
     if (response.status === 401) {
       setLabelVisible(true);
     } else if (response.status === 200) {
@@ -99,12 +105,19 @@ export function LoginForm(props) {
               Show Password
             </label>
           </div>
-          <button type="submit" className="btn btn-primary d-block w-100 fs-5">
+          <button
+            type="submit"
+            className="btn btn-primary d-block w-100 fs-5 position-relative border-0"
+          >
             Login
+            <WaitingAnimation
+              style={{ display: startWaitingAnimation ? "block" : "none" }}
+            />
           </button>
           <Link
             to="/register"
             className="fs-6 mt-2 d-block text-info text-decoration-none user-select-none"
+            style={{ width: "fit-content" }}
           >
             Register New User
           </Link>

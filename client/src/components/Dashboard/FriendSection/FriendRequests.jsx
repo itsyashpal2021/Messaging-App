@@ -6,6 +6,7 @@ import {
   removeFromFriendRequestsRecieved,
 } from "../../../state/slices";
 import { postToNodeServer, Routes } from "../../../utils";
+import WaitingAnimation from "../../WaitingAnimation";
 import ProfilePic from "../ProfilePic";
 
 export function FriendRequests(props) {
@@ -21,7 +22,9 @@ export function FriendRequests(props) {
     (state) => state.friendData.friendRequestsRecieved
   );
 
-  const acceptFriendRequest = async (request) => {
+  const acceptFriendRequest = async (event, request) => {
+    event.target.querySelector(".waitingAnimationDiv").style.display = "block";
+
     const friendRequestUsername = request.username;
     const response = await postToNodeServer(
       Routes.ACCEPT_FRIEND_REQUEST_ROUTE,
@@ -30,6 +33,8 @@ export function FriendRequests(props) {
         friendRequestUsername: friendRequestUsername,
       }
     );
+
+    event.target.querySelector(".waitingAnimationDiv").style.display = "block";
     if (response.status === 200) {
       const friend = {
         username: friendRequestUsername,
@@ -126,10 +131,11 @@ export function FriendRequests(props) {
 
               <p className="fs-4 text-white m-0">{username}</p>
               <button
-                className="btn btn-success fs-6 fw-bold text-black ms-auto me-2 p-1"
-                onClick={() => acceptFriendRequest(request)}
+                className="btn btn-success fs-6 fw-bold text-black ms-auto me-2 p-1 position-relative"
+                onClick={(event) => acceptFriendRequest(event, request)}
               >
                 Accept
+                <WaitingAnimation />
               </button>
               <button
                 className="btn btn-close btn-close-white p-1 ms-1"

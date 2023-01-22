@@ -12,3 +12,8 @@
 .modal-backdrop {
   background: transparent;
 }
+
+.btn {
+  box-shadow: none !important;
+  border: none;
+}

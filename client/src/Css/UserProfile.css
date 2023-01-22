@@ -11,7 +11,7 @@ i {
   height: fit-content;
 }
 
-.fa-solid:not(.fa-user):hover {
+.fa-solid:not(.fa-user):not(.fa-check):not(.fa-user-check):hover {
   background-color: rgb(51 73 101 / 30%);
   border-radius: 6px;
 }

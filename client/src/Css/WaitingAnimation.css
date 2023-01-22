@@ -1,0 +1,65 @@
+:root {
+  --r: 8px;
+  --bubbleSize: 5px;
+  --d: calc(var(--r) / 1.41421356237);
+}
+
+.waitingAnimationDiv {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1024;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.mainCircle {
+  position: absolute;
+  height: calc(2 * var(--r));
+  width: calc(2 * var(--r));
+  top: calc(50% - var(--r));
+  left: calc(50% - var(--r));
+  animation: spin 1s ease infinite;
+}
+
+.circle {
+  width: var(--bubbleSize);
+  height: var(--bubbleSize);
+  border-radius: 50%;
+  background-color: silver;
+  position: absolute;
+  left: calc(50% - (0.5 * var(--bubbleSize)));
+  top: calc(50% - (0.5 * var(--bubbleSize)));
+}
+
+.circle:nth-child(1) {
+  transform: translateX(calc(-1 * var(--r)));
+}
+.circle:nth-child(2) {
+  transform: translate(calc(-1 * var(--d)), calc(-1 * var(--d)));
+}
+.circle:nth-child(3) {
+  transform: translateY(calc(-1 * var(--r)));
+}
+.circle:nth-child(4) {
+  transform: translate(var(--d), calc(-1 * var(--d)));
+}
+.circle:nth-child(5) {
+  transform: translateX(var(--r));
+}
+.circle:nth-child(6) {
+  transform: translate(var(--d), var(--d));
+}
+.circle:nth-child(7) {
+  transform: translateY(var(--r));
+}
+.circle:nth-child(8) {
+  transform: translate(calc(-1 * var(--d)), var(--d));
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
