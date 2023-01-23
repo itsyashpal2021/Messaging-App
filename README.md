@@ -10,6 +10,7 @@ Deployed at  <http://talkato-web-service.onrender.com/>.
 * Nodejs for BackEnd.
 * MongoDb as Database.
 * Google Drive as cloud storage.
+* Socket.io for real time chatting.
 * Nodemailer for sending OTP to emails.
 
 ## Supported Features ##
@@ -20,7 +21,7 @@ Deployed at  <http://talkato-web-service.onrender.com/>.
 * Friend Requests.
 * Searching users and making friends
 * Text Chatting with friends.
-* Emoji support in chat.
+* Emoji support in the chat.
 * Unfriend feature.
 
 ## Future Work ##
@@ -29,4 +30,4 @@ Deployed at  <http://talkato-web-service.onrender.com/>.
 * Notifications.
 * Clear Chat option.
 
-##  ##
+## ScreenShots ##
