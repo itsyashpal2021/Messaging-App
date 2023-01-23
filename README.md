@@ -1,15 +1,32 @@
-Welcome to Talkato -- A messaging app project.
-Tech stack : MERN
+# Talkato #
 
------ Milestones ----
+Welcome to Talkato -- A messaging app project.  
+Deployed at  <http://talkato-web-service.onrender.com/>.
 
-1. sign up and sign in forms.
-2. connecting above to mongoDb and backend.
-3. friend list, friend requests.
-4. text chatting with friends.
-5. profile picture.
-6. emojis, images and videos in the chat.
-7. unfriend, clear chat
-8. Email verification with otp and forgot password.
-9. Group Chat
-10. Notification tab for fr rejected/accepted
+
+## Tech Stack ##
+
+* HTML CSS and ReactJs for FrontEnd.
+* Nodejs for BackEnd.
+* MongoDb as Database.
+* Google Drive as cloud storage.
+* Nodemailer for sending OTP to emails.
+
+## Supported Features ##
+
+* Sign Up : New user can Register from their email.
+* Log In and Forgot Password functionality.
+* Profile Picture.
+* Friend Requests.
+* Searching users and making friends
+* Text Chatting with friends.
+* Emoji support in chat.
+* Unfriend feature.
+
+## Future Work ##
+* Group Chat.
+* Images and Videos in Chat.
+* Notifications.
+* Clear Chat option.
+
+##  ##
