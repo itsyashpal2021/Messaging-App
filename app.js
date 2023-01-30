@@ -138,6 +138,11 @@ connectToDb().then(() => {
       socket.in(request.friendUsername).emit("unfriended", request.username);
     });
 
+    socket.on("checkOnline", async (username, callback) => {
+      const userOnline = await socket.in(username).fetchSockets();
+      callback(userOnline.length !== 0);
+    });
+
     socket.on("logout", (username) => {
       socket.leave(username);
     });

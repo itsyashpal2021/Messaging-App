@@ -63,7 +63,7 @@ export function FriendSection(props) {
     >
       <FriendRequests {...props} />
       <SearchUser {...props} />
-      <FriendList />
+      <FriendList {...props} />
     </div>
   );
 }

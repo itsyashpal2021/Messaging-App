@@ -10,6 +10,9 @@ import { postToNodeServer, Routes } from "../../../utils";
 export function FriendDetails(props) {
   const username = useSelector((state) => state.userData.username);
   const friend = useSelector((state) => state.activeChat);
+  const isOnline = useSelector(
+    (state) => state.onlineFriends.indexOf(friend.username) !== -1
+  );
   const dispatch = useDispatch();
 
   const socket = props.socket;
@@ -58,12 +61,15 @@ export function FriendDetails(props) {
         size="60px"
         className="ms-1 me-3 fs-2"
         src={friend.profilePic}
+        isOnline={isOnline}
       />
       <div>
         <p className="fs-2 m-0 lh-1">
           {friend.firstName} {friend.lastName}
         </p>
-        <span className="fw-lighter">{friend.username}</span>
+        <span className="h6 text-info">
+          {isOnline ? "online" : friend.username}
+        </span>
       </div>
       <i
         className="fa-solid fa-ellipsis-vertical fs-2 p-2 ms-auto"

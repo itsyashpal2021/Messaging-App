@@ -7,6 +7,7 @@ export default function ProfilePic(props) {
         width: props.size,
         height: props.size,
         border: "2px solid",
+        position: "relative",
         ...props.style,
       }}
       id={props.id}
@@ -23,6 +24,18 @@ export default function ProfilePic(props) {
       ) : (
         <i className={`fa-solid fa-user`} />
       )}
+      <div
+        className="position-absolute"
+        style={{
+          display: props.isOnline ? "block" : "none",
+          width: "15px",
+          height: "15px",
+          bottom: 0,
+          right: 0,
+          borderRadius: "50%",
+          backgroundColor: "#10d010",
+        }}
+      ></div>
     </div>
   );
 }

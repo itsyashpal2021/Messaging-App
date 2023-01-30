@@ -106,6 +106,22 @@ export const chatDataSlice = createSlice({
   },
 });
 
+export const onlineFriendsSlice = createSlice({
+  name: "onlineFriends",
+  initialState: [],
+  reducers: {
+    addOnlineFriend: (state, action) => {
+      if (!state.includes(action.payload)) state.push(action.payload);
+    },
+    removeFromOnlineFriend: (state, action) => {
+      const index = state.indexOf(action.payload);
+      if (index > -1) {
+        state.splice(index, 1);
+      }
+    },
+  },
+});
+
 // Action creators are generated for each case reducer function
 export const { setUser, setProfilePic } = userSlice.actions;
 
@@ -125,9 +141,13 @@ export const { setActiveChat, addToMessages } = activeChatSlice.actions;
 export const { setMessages, addMessage, clearChat, newChat } =
   chatDataSlice.actions;
 
+export const { addOnlineFriend, removeFromOnlineFriend } =
+  onlineFriendsSlice.actions;
+
 export default combineReducers({
   userData: userSlice.reducer,
   friendData: friendDataSlice.reducer,
   activeChat: activeChatSlice.reducer,
   chatData: chatDataSlice.reducer,
+  onlineFriends: onlineFriendsSlice.reducer,
 });

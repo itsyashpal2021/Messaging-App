@@ -1,13 +1,42 @@
+import { useCallback } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveChat } from "../../../state/slices";
+import {
+  addOnlineFriend,
+  removeFromOnlineFriend,
+  setActiveChat,
+} from "../../../state/slices";
 import ProfilePic from "../ProfilePic";
 
 export function FriendList(props) {
   const friendList = useSelector((state) => state.friendData.friendList);
   const activeChat = useSelector((state) => state.activeChat);
   const messages = useSelector((state) => state.chatData.messages);
+  const onlineFriends = useSelector((state) => new Set(state.onlineFriends));
 
   const dispatch = useDispatch();
+
+  const socket = props.socket;
+
+  const updateOnlineFriends = useCallback(() => {
+    if (!socket) return;
+    friendList.forEach((friend) => {
+      socket.emit("checkOnline", friend.username, (isOnline) => {
+        if (isOnline) {
+          dispatch(addOnlineFriend(friend.username));
+        } else {
+          dispatch(removeFromOnlineFriend(friend.username));
+        }
+      });
+    });
+  }, [friendList, dispatch, socket]);
+
+  useEffect(() => {
+    //update online status every 10s
+    updateOnlineFriends();
+    const interval = setInterval(updateOnlineFriends, 10000);
+    return () => clearInterval(interval);
+  }, [updateOnlineFriends]);
 
   return (
     <div
@@ -67,6 +96,7 @@ export function FriendList(props) {
                 color: "aqua",
               }}
               src={friend.profilePic}
+              isOnline={onlineFriends.has(friend.username)}
             />
             <div className="d-flex flex-column w-100  ">
               <span className="fs-3 text-white lh-1">
