@@ -84,20 +84,23 @@ export function MessageBox(props) {
                 <></>
               )}
               <div
-                className="m-1 p-2 d-flex"
+                className="m-1 p-2 d-flex flex-column"
                 style={{
                   maxWidth: "50%",
                   width: "fit-content",
-                  borderRadius: "25% 0",
+                  minWidth: "100px",
+                  borderRadius: "50rem",
+                  borderTopRightRadius: isRecieved ? "50rem" : "0",
+                  borderTopLeftRadius: isRecieved ? "0" : "50rem",
                   alignSelf: isRecieved ? "flex-start" : "flex-end",
                   backgroundColor: isRecieved ? "#67604c" : "#1b1ba1",
                 }}
               >
-                <span className="m-0 text-break text-white fs-5">
+                <span className="m-0 text-break text-white fs-6">
                   {message.message}
                 </span>
                 <span
-                  className="m-0 text-end align-self-end ms-3 mt-4"
+                  className="ms-auto text-end align-self-end"
                   style={{
                     fontSize: "10px",
                     color: isRecieved ? "#b6c4d1" : "#c4bd8f",
