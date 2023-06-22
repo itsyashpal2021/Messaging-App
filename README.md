@@ -47,4 +47,4 @@ Deployed at  <http://talkato-web-service.onrender.com/>.
 ![Friend Requests](https://user-images.githubusercontent.com/89623554/213961780-ab94374c-b063-44ac-9213-3753e0eea747.png)
 
 * Chat with freinds
-![Chat](https://user-images.githubusercontent.com/89623554/213961775-84bde88e-93b4-43da-adb5-d2b458821dbc.png)
+![Chat](https://github.com/itsyashpal2021/Talkato/assets/89623554/08620896-a38f-4582-8721-ad3f35dbc788)
